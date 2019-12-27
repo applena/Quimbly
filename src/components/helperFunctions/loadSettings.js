@@ -1,17 +1,16 @@
 import LoadEvents from './loadEvents';
-import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions.js';
 
-function loadToDos(){
+function loadSettings(props, cb){
 
 
     // finding the MyQ calendar if it exists
-    let myQCalendar = calendars.filter(calendar => {
+    let myQCalendar = props.calendars.filter(calendar => {
       return calendar.summary === 'MyQ';
     })[0];
 
-    // if myQ calendar exists, run LoadEvents with that instance
+    // if myQ calendar exists, run LoadEvents which gets all the enties in the calendar with that instance
     if(myQCalendar){
       return LoadEvents(myQCalendar, {timeMin: '2018-01-01T00:00:00-00:00'})
         .then(events => cb(events));
@@ -26,7 +25,7 @@ function loadToDos(){
       console.log('MyQ calendar created', response);
       return LoadEvents(myQCalendar, {timeMin: '2018-01-01T00:00:00-00:00'})
         .then(events => cb(events));
-    });
+    });                
 // grab the myQ cal
 // or create it if it doesn't exist
 // then: list the events for that calendar
@@ -35,4 +34,17 @@ function loadToDos(){
 // store that config event in memory as the preferences for the user
 }
 
-export default loadToDos;
+const mapDispatchToProps = (dispatch, getState) => {
+  return {
+    setCalendars: (calendar) => dispatch(actions.setCalendars(calendar))
+  }
+};
+
+const mapStateToProps = state => ({
+  Calendars: state.Calendars
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(loadSettings);

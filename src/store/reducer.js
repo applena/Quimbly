@@ -1,11 +1,5 @@
-let initialState = {
-  DailyTasks: [],
-  Calendars: [],
-  User: 'bob',
-  loggedIn: false
-};
-
-export default (state = initialState, action) => {
+import reduxData from './data'
+export default (state = reduxData, action) => {
   let { type, payload } = action;
   console.log('in reducer with',type, payload)
   switch (type) {
@@ -20,7 +14,7 @@ export default (state = initialState, action) => {
 
     case 'SETCALENDARS':
       console.log('setting calendars', payload);
-      state.Calendars = payload;
+      state.calendars = payload;
       return state;
 
     case 'SETUSER':

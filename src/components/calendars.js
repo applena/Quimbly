@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../store/actions.js';
+// import store from '../store';
+// import reduxData from '../store/data';
+import * as actions from '../store/actions';
 /* global gapi */
 
 class Calendars extends React.Component{
@@ -20,33 +22,60 @@ class Calendars extends React.Component{
       .then(function(response) {
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         let calendars = response.result.items;
+
         // alphabetize and store in app data
         calendars.sort((a, b) => {
           return a.summary > b.summary ? 1 : -1;
         });
-        console.log('!!!!!!!!!!!!!!!!!', {calendars})
-        self.setState({calendars: calendars})
+
+        // set the calendars in redux
         self.props.setCalendars(calendars);
+        
+        // show the main calendar todo space
+        self.props.showCalendars();
+
+        // set the calendars in state to render to the page
+        self.setState({calendars: calendars})
     })
   }
 
-  
   render(){
+    
+    
     return(
       <div>
         { this.state.calendars.length &&
           <div>
             <h2>Calendars</h2>
         
-            <ul>
-              {this.state.calendars.map((calendar, i) => (
-                <li key={i}>{calendar.summary}</li>
-              )
+            <form>
+              {this.state.calendars.map((calendar, i) => {
+                
+                const calendarColorStyle = {
+                  backgroundColor: calendar.backgroundColor,
+                  width: '12px',
+                  height: '12px',
+                  display: 'inline-block',
+                  borderRadius: '4px'
+                };
+
+                console.log(calendarColorStyle);
+
+                const inputName = calendar.summary;
+
+                return (<div key={i}>
+                  <span className="box" style={calendarColorStyle}></span>
+                  <label>
+                    <input type="checkbox" name={inputName} value={inputName} defaultChecked />{calendar.summary}
+                  </label>
+                </div>
               )}
-            </ul>
+              )}
+            </form>
           </div>
         }
       </div>
+ 
     )
   }
 
@@ -55,12 +84,14 @@ class Calendars extends React.Component{
 
 const mapDispatchToProps = (dispatch, getState) => {
   return {
-    setCalendars: (calendar) => dispatch(actions.setCalendars(calendar))
+    setCalendars: calendars => {
+      return dispatch(actions.setCalendars(calendars))
+    }
   }
 };
 
 const mapStateToProps = state => ({
-  Calendars: state.someData.Calendars
+  calendars: state.calendars
 });
 
 export default connect(

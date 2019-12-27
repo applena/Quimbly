@@ -8,8 +8,7 @@ class user extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      userName: 'bob',
-      show: false
+      userName: 'bob'
     };
   }
 
@@ -17,16 +16,13 @@ class user extends React.Component{
   componentDidMount(){
     let name = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
     this.setState({
-      userName: name,
-      show: true
+      userName: name
     });
   }
 
   render(){
     return(
-      <When condition={this.state.show}>
-        <h2>Hello {this.state.userName}</h2>
-      </When>
+      <h2>Hello {this.state.userName}</h2>
     )
   }
 }
@@ -38,7 +34,7 @@ const mapDispatchToProps = (dispatch, getState) => {
 };
 
 const mapStateToProps = state => ({
-  User: state.someData.User,
+  User: state.User,
 });
 
 export default connect(

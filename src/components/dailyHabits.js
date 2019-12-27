@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch, getState) => {
 };
 
 const mapStateToProps = state => ({
-  DailyHabits: state.someData.DailyTasks,
+  DailyHabits: state.DailyTasks,
 });
 
 export default connect(

@@ -2,12 +2,7 @@
 
 import React from 'react';
 import Layout from './components/layout';
-// import DailyHabits from './components/dailyHabits';
-// import DailyPersonalGrowth from './components/dailyPersonalGrowth';
-// import PersonalToDos from './components/personalToDos';
-// import ProfessionalToDos from './components/professionalToDos';
 import Calendars from './components/calendars';
-// import LoadToDos from './components/helperFunctions/loadToDos';
 import User from './components/user';
 import When from './components/when';
 import { connect } from 'react-redux';
@@ -15,13 +10,15 @@ import * as actions from './store/actions.js';
 
 class App extends React.Component {
 
-  constructor(props) {
+  constructor(props){
     super(props);
-    this.state = {show: false};
+    this.state = {
+      show: false,
+      showCalendars: false
+    }
   }
 
-
-  componentDidMount(){
+  componentDidMount = () => {
     const self = this;
     const script = document.createElement("script");
   
@@ -45,14 +42,7 @@ class App extends React.Component {
           const onLoggedIn =() => {
             console.log('user is signed in');
             self.props.isLoggedIn(true);
-            self.setState({show:true});
-
-            // LoadCalendars(calendars => {
-            //   //sort events and store in redux
-            //   // self.props.setDailyTasks(calendars);
-
-            //   LoadToDos();
-            // });
+            self.setState({show: true});
           }
           
           // if the user is not logged in, log them into google and load their calendars with events
@@ -66,7 +56,11 @@ class App extends React.Component {
           onLoggedIn();          
         });
       });
-  };
+    };
+  }
+
+  updateCalendars = () => {
+    this.setState({showCalendars:true});
   }
 
   render() {
@@ -76,14 +70,12 @@ class App extends React.Component {
         <When condition={this.state.show}>
           <div>
             <User />
-            <Calendars />
+            <Calendars showCalendars={this.updateCalendars} />
+            <When condition={this.state.showCalendars}>
+              <h1>Calendars ready</h1>
+            </When>
           </div>
         </When>
-
-        {/* <DailyHabits />
-          <DailyPersonalGrowth />
-          <PersonalToDos />
-        <ProfessionalToDos /> */}
       </Layout>
     );
   }
@@ -97,8 +89,9 @@ const mapDispatchToProps = (dispatch, getState) => {
 };
 
 const mapStateToProps = state => ({
-  DailyHabits: state.someData.DailyHabits,
-  loggedIn: state.someData.loggedIn
+  DailyHabits: state.DailyHabits,
+  loggedIn: state.loggedIn,
+  calendars: state.calendars
 });
 
 export default connect(
