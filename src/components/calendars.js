@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import store from '../store';
-// import reduxData from '../store/data';
 import * as actions from '../store/actions';
+import loadConfig from './helperFunctions/loadConfig';
+import data from '../store/data';
 /* global gapi */
 
 class Calendars extends React.Component{
@@ -10,7 +10,7 @@ class Calendars extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      calendars: []
+      nonCalendars: []
     };
   }
 
@@ -31,12 +31,32 @@ class Calendars extends React.Component{
         // set the calendars in redux
         self.props.setCalendars(calendars);
         
+        // ensures the myQ calendar exists
+        loadConfig(calendars, self.state.nonCalendars, () => {
+          console.log('hi')
+        })
+        // ensure the config event exitsts
+        // set the config state in redux
+
+        
         // show the main calendar todo space
         self.props.showCalendars();
 
-        // set the calendars in state to render to the page
-        self.setState({calendars: calendars})
+        // // set the calendars in state to render to the page
+        // self.setState({calendars: calendars})
     })
+  }
+
+  updateCalendarList = (e) => {
+    let excludedCalendar = e.target.name;
+    this.state.nonCalendars.push(excludedCalendar); 
+    this.setState({nonCalendars: this.state.nonCalendars});
+
+    data.config.hiddenCalendars.push(excludedCalendar);
+    // console.log('excluded Calendars from state', this.state.nonCalendars);
+    // console.log('excluded calendars from data', data.config.hiddenCalendars)
+
+    // ** uppdate configs **
   }
 
   render(){
@@ -44,12 +64,12 @@ class Calendars extends React.Component{
     
     return(
       <div>
-        { this.state.calendars.length &&
+        { this.props.calendars.calendars.length &&
           <div>
             <h2>Calendars</h2>
         
-            <form>
-              {this.state.calendars.map((calendar, i) => {
+            <form onChange={this.updateCalendarList}>
+              {this.props.calendars.calendars.map((calendar, i) => {
                 
                 const calendarColorStyle = {
                   backgroundColor: calendar.backgroundColor,
@@ -58,8 +78,6 @@ class Calendars extends React.Component{
                   display: 'inline-block',
                   borderRadius: '4px'
                 };
-
-                console.log(calendarColorStyle);
 
                 const inputName = calendar.summary;
 

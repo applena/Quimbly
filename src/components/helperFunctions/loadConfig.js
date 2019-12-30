@@ -1,28 +1,32 @@
 import LoadEvents from './loadEvents';
-import { connect } from 'react-redux';
-import * as actions from '../../store/actions.js';
+import excludeCalenders from './excludeCalenders';
+import data from '../../store/data';
 
-function loadSettings(props, cb){
+/* global gapi */
 
+function loadConfig(calendars, excludedCalendars, cb){
 
     // finding the MyQ calendar if it exists
-    let myQCalendar = props.calendars.filter(calendar => {
+    let myQCalendar = calendars.filter(calendar => {
       return calendar.summary === 'MyQ';
     })[0];
 
     // if myQ calendar exists, run LoadEvents which gets all the enties in the calendar with that instance
     if(myQCalendar){
+      console.log('found a myQ calendar, loading the events');
       return LoadEvents(myQCalendar, {timeMin: '2018-01-01T00:00:00-00:00'})
-        .then(events => cb(events));
+        .then(cb);
     }
 
     // if myQ calendar doesn't exist, create MyQ calendar
     gapi.client.calendar.calendars.insert({
       summary: 'MyQ',
-      description: 'The MyQ Calendar holds ToDo items created in MyQ and it stores preferences for MyQ in a single (ancient) event.'
+      description: JSON.stringify(data.config)
     }).then(function(response){
+      // create a calendar config event
+      
       myQCalendar = response.result;
-      console.log('MyQ calendar created', response);
+      
       return LoadEvents(myQCalendar, {timeMin: '2018-01-01T00:00:00-00:00'})
         .then(events => cb(events));
     });                
@@ -34,17 +38,19 @@ function loadSettings(props, cb){
 // store that config event in memory as the preferences for the user
 }
 
-const mapDispatchToProps = (dispatch, getState) => {
-  return {
-    setCalendars: (calendar) => dispatch(actions.setCalendars(calendar))
-  }
-};
+// const mapDispatchToProps = (dispatch, getState) => {
+//   return {
+//     setCalendars: (calendar) => dispatch(actions.setCalendars(calendar))
+//   }
+// };
 
-const mapStateToProps = state => ({
-  Calendars: state.Calendars
-});
+// const mapStateToProps = state => ({
+//   Calendars: state.Calendars
+// });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(loadSettings);
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps,
+// )(loadConfig);
+
+export default loadConfig;

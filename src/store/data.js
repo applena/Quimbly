@@ -2,7 +2,10 @@ const reduxData = {
   DailyTasks: [],
   calendars: [],
   User: 'bob',
-  loggedIn: false
+  loggedIn: false,
+  config: {
+    hiddenCalendars: []
+  }
 };
 window.reduxData = reduxData;
 

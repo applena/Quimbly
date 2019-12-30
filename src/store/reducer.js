@@ -1,4 +1,5 @@
-import reduxData from './data'
+import reduxData from './data';
+
 export default (state = reduxData, action) => {
   let { type, payload } = action;
   console.log('in reducer with',type, payload)
@@ -14,8 +15,8 @@ export default (state = reduxData, action) => {
 
     case 'SETCALENDARS':
       console.log('setting calendars', payload);
-      state.calendars = payload;
-      return state;
+      // state.calendars = payload;
+      return {...state, calendars:payload};
 
     case 'SETUSER':
       console.log('setting the user', payload);

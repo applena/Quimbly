@@ -7,6 +7,7 @@ import User from './components/user';
 import When from './components/when';
 import { connect } from 'react-redux';
 import * as actions from './store/actions.js';
+import DailyOutline from './components/dailyOutline';
 
 class App extends React.Component {
 
@@ -72,7 +73,8 @@ class App extends React.Component {
             <User />
             <Calendars showCalendars={this.updateCalendars} />
             <When condition={this.state.showCalendars}>
-              <h1>Calendars ready</h1>
+              <h1>calendars are ready</h1>
+              <DailyOutline />
             </When>
           </div>
         </When>
