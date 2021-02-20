@@ -22,6 +22,14 @@ export const setCalendars = payload => {
   };
 };
 
+export const hideCalendar = payload => {
+  console.log('in actions with', payload)
+  return{
+    type: 'HIDECALENDAR',
+    payload,
+  };
+}
+
 export const setUser = payload => {
   console.log('in actions with', payload)
   return {

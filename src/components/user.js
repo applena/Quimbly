@@ -4,20 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from '../store/actions.js';
 
 class user extends React.Component{
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     userName: 'bob'
-  //   };
-  // }
 
 
   componentDidMount(){
     let name = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
     this.props.setUser(name);
-    // this.setState({
-    //   userName: name
-    // });
   }
 
   render(){

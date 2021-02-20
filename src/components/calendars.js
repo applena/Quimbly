@@ -7,13 +7,6 @@ import data from '../store/data';
 
 class Calendars extends React.Component{
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      nonCalendars: []
-    };
-  }
-
   // need to wait until a user is signed in to call this function
   componentDidMount(){
     console.log('calendar:componentDidMount');
@@ -32,8 +25,9 @@ class Calendars extends React.Component{
         self.props.setCalendars(calendars);
         
         // ensures the myQ calendar exists
-        loadConfig(calendars, self.state.nonCalendars, () => {
-          console.log('hi')
+        loadConfig(calendars, self.props.calendars.config.hiddenCalendars, (config, myQCalendar) => {
+          // set the config in redux to the config
+          // store myQ cal as this calendar instance    
         })
         // ensure the config event exitsts
         // set the config state in redux
@@ -49,13 +43,9 @@ class Calendars extends React.Component{
 
   updateCalendarList = (e) => {
     let excludedCalendar = e.target.name;
-    this.state.nonCalendars.push(excludedCalendar); 
-    this.setState({nonCalendars: this.state.nonCalendars});
+    this.props.hideCalendar(excludedCalendar);
 
     data.config.hiddenCalendars.push(excludedCalendar);
-    // console.log('excluded Calendars from state', this.state.nonCalendars);
-    // console.log('excluded calendars from data', data.config.hiddenCalendars)
-
     // ** uppdate configs **
   }
 
@@ -93,10 +83,8 @@ class Calendars extends React.Component{
           </div>
         }
       </div>
- 
     )
   }
-
 }
 
 
@@ -104,6 +92,9 @@ const mapDispatchToProps = (dispatch, getState) => {
   return {
     setCalendars: calendars => {
       return dispatch(actions.setCalendars(calendars))
+    },
+    hideCalendar: calendar => {
+      return dispatch(actions.hideCalendar(calendar));
     }
   }
 };

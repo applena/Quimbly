@@ -18,6 +18,11 @@ export default (state = reduxData, action) => {
       // state.calendars = payload;
       return {...state, calendars:payload};
 
+    case 'HIDECALENDAR':
+      console.log('hiding calendar', payload);
+      let okCalendars = state.calendars.filter(calendar => calendar !== payload)
+      return{...state, calendars:okCalendars, config: {hiddenCalendars: [...payload]}};
+
     case 'SETUSER':
       console.log('setting the user', payload);
       state.User = payload;

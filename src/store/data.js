@@ -5,7 +5,8 @@ const reduxData = {
   loggedIn: false,
   config: {
     hiddenCalendars: []
-  }
+  },
+  myQCalendar: {}
 };
 window.reduxData = reduxData;
 
