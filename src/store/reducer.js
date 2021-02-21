@@ -2,26 +2,27 @@ import reduxData from './data';
 
 export default (state = reduxData, action) => {
   let { type, payload } = action;
-  console.log('in reducer with',type, payload)
+  console.log('in reducer with',type, state, payload)
   switch (type) {
-    case 'ADDDAILYTASKS':
-      state.DailyTasks.push(payload);
-      console.log('adding a daily task', payload);
-      return { DailyTasks: [...state.DailyTasks] };
+    // case 'ADDDAILYTASKS':
+    //   state.DailyTasks.push(payload);
+    //   console.log('adding a daily task', payload);
+    //   return { DailyTasks: [...state.DailyTasks] };
     
-    case 'SETDAILYTASKS':
-        console.log('setting daily tasks', payload);
-      return { DailyTasks: payload };
+    // case 'SETDAILYTASKS':
+    //     console.log('setting daily tasks', payload);
+    //   return { DailyTasks: payload };
 
     case 'SETCALENDARS':
-      console.log('setting calendars', payload);
+      console.log('REDUX DATA:', reduxData)
+      console.log('REDUCERS: setting calendars', payload, state);
       // state.calendars = payload;
       return {...state, calendars:payload};
 
     case 'HIDECALENDAR':
       console.log('hiding calendar', payload);
       let okCalendars = state.calendars.filter(calendar => calendar !== payload)
-      return{...state, calendars:okCalendars, config: {hiddenCalendars: [...payload]}};
+      return {...state, calendars:okCalendars, config: {hiddenCalendars: [...payload]}};
 
     case 'SETUSER':
       console.log('setting the user', payload);
@@ -29,8 +30,8 @@ export default (state = reduxData, action) => {
       return state;
     
     case 'ISLOGGEDIN':
-      // console.log('setting the logged in state', payload);
       state.loggedIn = payload;
+      console.log('setting the logged in state', payload, state);
       return state;
 
     default:

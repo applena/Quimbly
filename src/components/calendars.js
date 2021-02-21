@@ -16,29 +16,38 @@ class Calendars extends React.Component{
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         let calendars = response.result.items;
 
-        // alphabetize and store in app data
-        calendars.sort((a, b) => {
-          return a.summary > b.summary ? 1 : -1;
-        });
-
-        // set the calendars in redux
-        self.props.setCalendars(calendars);
-        
-        // ensures the myQ calendar exists
-        loadConfig(calendars, self.props.calendars.config.hiddenCalendars, (config, myQCalendar) => {
-          // set the config in redux to the config
-          // store myQ cal as this calendar instance    
-        })
-        // ensure the config event exitsts
-        // set the config state in redux
+        self.updateConfig(calendars);
 
         
-        // show the main calendar todo space
-        self.props.showCalendars();
-
-        // // set the calendars in state to render to the page
-        // self.setState({calendars: calendars})
     })
+  }
+
+  updateConfig = (calendars) => {
+    // alphabetize and store in app data
+    calendars.sort((a, b) => {
+      return a.summary > b.summary ? 1 : -1;
+    });
+
+    // set the calendars in redux
+    // this.props.setCalendars(calendars);
+
+    // ensures the myQ calendar exists
+    loadConfig(calendars, this.props.config.hiddenCalendars, (okCalendars, myQCalendar) => {
+      // set the config in redux to the config
+      console.log('1. CALENDARS: the config after loadConfig:', data.calendars);
+      this.props.setCalendars(okCalendars);
+      console.log('2. CALENDARS: the config after loadConfig:', data.calendars);
+      // store myQ cal as this calendar instance    
+    })
+    // ensure the config event exitsts
+    // set the config state in redux
+
+
+    // show the main calendar todo space
+    this.props.showCalendars();
+
+    // // set the calendars in state to render to the page
+    // self.setState({calendars: calendars})
   }
 
   updateCalendarList = (e) => {
@@ -47,19 +56,21 @@ class Calendars extends React.Component{
 
     data.config.hiddenCalendars.push(excludedCalendar);
     // ** uppdate configs **
+    this.updateConfig(data.calendars)
+
   }
 
   render(){
     
-    
+    console.log('CALENDARS:', this.props)
     return(
       <div>
-        { this.props.calendars.calendars.length &&
+        { this.props.calendars.length &&
           <div>
             <h2>Calendars</h2>
         
             <form onChange={this.updateCalendarList}>
-              {this.props.calendars.calendars.map((calendar, i) => {
+              {this.props.calendars.map((calendar, i) => {
                 
                 const calendarColorStyle = {
                   backgroundColor: calendar.backgroundColor,
@@ -100,7 +111,8 @@ const mapDispatchToProps = (dispatch, getState) => {
 };
 
 const mapStateToProps = state => ({
-  calendars: state.calendars
+  calendars: state.reduxData.calendars,
+  config: state.reduxData.config
 });
 
 export default connect(

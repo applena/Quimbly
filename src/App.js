@@ -34,7 +34,7 @@ class App extends React.Component {
       gapi.load('client:auth2', function initClient() {
         gapi.client.init({
           discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
-          clientId: '666346298716-sla03uo3osduktv9j72epqrji83i7kt4.apps.googleusercontent.com',
+          clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
           scope: 'https://www.googleapis.com/auth/calendar'
         }).then(function () {
 
@@ -61,7 +61,9 @@ class App extends React.Component {
   }
 
   updateCalendars = () => {
-    this.setState({showCalendars:true});
+    this.setState({
+      showCalendars:true
+    });
   }
 
   render() {
@@ -90,11 +92,13 @@ const mapDispatchToProps = (dispatch, getState) => {
   }
 };
 
-const mapStateToProps = state => ({
-  DailyHabits: state.DailyHabits,
-  loggedIn: state.loggedIn,
-  calendars: state.calendars
-});
+const mapStateToProps = state => {
+  console.log('mapstatetoprops', state);
+  return {
+  DailyHabits: state.reduxData.DailyHabits,
+  loggedIn: state.reduxData.loggedIn,
+  calendars: state.reduxData.calendars}
+};
 
 export default connect(
   mapStateToProps,

@@ -2,7 +2,7 @@ import { createStore, combineReducers } from "redux";
 
 import reducer from "./reducer.js";
 
-let myStore = combineReducers({ calendars: reducer });
+let myStore = combineReducers({ reduxData:reducer });
 
 const store = () =>
   createStore(myStore);

@@ -1,3 +1,5 @@
+// import { config } from '../../store/data';
+
 function excludeCalendars(calendars, myQCalendar){
   let stringDescription = JSON.stringify(calendars);
 
@@ -5,5 +7,10 @@ function excludeCalendars(calendars, myQCalendar){
 
   console.log('config updated with excluded calendar', myQCalendar);
 }
+
+const mapStateToProps = state => ({
+  chosenCalendars: state.calendars
+})
+
 
 export default excludeCalendars;

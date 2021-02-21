@@ -15,7 +15,7 @@ export const setDailyTasks = payload => {
 };
 
 export const setCalendars = payload => {
-  console.log('in actions with', payload)
+  console.log('in setCalendars actions with', payload)
   return {
     type: 'SETCALENDARS',
     payload,
@@ -39,7 +39,7 @@ export const setUser = payload => {
 };
 
 export const isLoggedIn = payload => {
-  console.log('in actions with', payload)
+  console.log('in ISLOGGEDIN actions with', payload)
   return {
     type: 'ISLOGGEDIN',
     payload,

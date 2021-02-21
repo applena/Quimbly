@@ -1,8 +1,10 @@
 import data from '../../store/data';
-
+import { connect } from 'react-redux';
 /* global gapi */
 
-function loadConfig(calendars, excludedCalendars, cb){
+function loadConfig(calendars, hiddenCalendars, cb){
+
+  console.log('LOAD CONFIG', calendars)
 
     // finding the MyQ calendar if it exists
     let myQCalendar = calendars.filter(calendar => {
@@ -14,8 +16,10 @@ function loadConfig(calendars, excludedCalendars, cb){
 
       let config = JSON.parse(myQCalendar.description);
 
-      console.log('my parssed calendar', config);
-      return cb(config, myQCalendar);
+      const okCalendars = calendars.filter(calendar => !hiddenCalendars.includes(calendar))
+      console.log('LOAD CONFIG: okCalendars', config, okCalendars);
+
+      return cb(okCalendars, myQCalendar);
     }
 
     // if myQ calendar doesn't exist, create MyQ calendar
