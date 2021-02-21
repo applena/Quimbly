@@ -21,6 +21,21 @@ export const setCalendars = payload => {
     payload,
   };
 };
+export const setMyQCalendar = payload => {
+  console.log('in setMyQCalendar actions with', payload)
+  return {
+    type: 'SETMYQCALENDAR',
+    payload,
+  };
+};
+export const setConfig = payload => {
+  console.log('in setConfig actions with', payload)
+  return {
+    type: 'SETCONFIG',
+    payload,
+  };
+};
+
 
 export const hideCalendar = payload => {
   console.log('in actions with', payload)

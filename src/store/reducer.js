@@ -13,16 +13,23 @@ export default (state = reduxData, action) => {
     //     console.log('setting daily tasks', payload);
     //   return { DailyTasks: payload };
 
+    case 'SETCONFIG':
+      console.log('SETCONFIG:', payload)
+      return {...state, config:payload};
+
     case 'SETCALENDARS':
-      console.log('REDUX DATA:', reduxData)
-      console.log('REDUCERS: setting calendars', payload, state);
-      // state.calendars = payload;
+      console.log('SETCALENDARS:', payload)
       return {...state, calendars:payload};
 
+    case 'SETMYQCALENDAR':
+      console.log('SETMYQCALENDAR:', payload)
+      return {...state, myQCalendar:payload};
+
     case 'HIDECALENDAR':
-      console.log('hiding calendar', payload);
-      let okCalendars = state.calendars.filter(calendar => calendar !== payload)
-      return {...state, calendars:okCalendars, config: {hiddenCalendars: [...payload]}};
+      const hiddenCalendars = state.config.hiddenCalendars;
+      if(hiddenCalendars.includes(payload)) return state;
+      hiddenCalendars.push(payload);
+      return {...state, config: {hiddenCalendars}};
 
     case 'SETUSER':
       console.log('setting the user', payload);

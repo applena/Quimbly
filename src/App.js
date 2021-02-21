@@ -97,7 +97,9 @@ const mapStateToProps = state => {
   return {
   DailyHabits: state.reduxData.DailyHabits,
   loggedIn: state.reduxData.loggedIn,
-  calendars: state.reduxData.calendars}
+  calendars: state.reduxData.calendars,
+  config: state.reduxData.config
+  }
 };
 
 export default connect(
