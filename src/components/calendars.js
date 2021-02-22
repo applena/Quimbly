@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import loadConfig from './helperFunctions/loadConfig';
 import data from '../store/data';
@@ -7,6 +7,7 @@ import saveConfig from './helperFunctions/saveConfig';
 /* global gapi */
 
 function Calendars(props){
+  const [hiddenCalendars, setHiddenCalendars] = useState([]);
 
   // need to wait until a user is signed in to call this function
   useEffect(() => {
@@ -21,7 +22,6 @@ function Calendars(props){
   }, [])
 
   const updateConfig = async (calendars) => {
-    console.log('CALENDAR: updateConfig, calendars', calendars, props.config.hiddenCalendars);
     // alphabetize and store in app data
     calendars.sort((a, b) => {
       return a.summary > b.summary ? 1 : -1;
@@ -32,6 +32,11 @@ function Calendars(props){
 
     // ensures the myQ calendar exists
     const {config, myQCalendar} = await loadConfig(calendars);
+
+    // put the hidden calendars in state
+    const hiddenCalendars = JSON.parse(myQCalendar.description);
+    setHiddenCalendars(hiddenCalendars.hiddenCalendars);
+
     // set the config in redux to the config
     props.setConfig(config);
     props.setMyQCalendar(myQCalendar);
@@ -51,7 +56,6 @@ function Calendars(props){
   }
 
   const updateCalendarList = (e) => {
-    console.log('CALENDAR: updateCalenderList', props.calendars)
     let excludedCalendar = e.target.name;
     props.hideCalendar(excludedCalendar);
 
@@ -61,7 +65,7 @@ function Calendars(props){
 
   }
 
-  console.log('CALENDARS:', props)
+  // console.log('CALENDARS:', props)
   return(
     <div>
       { props.calendars.length &&
@@ -80,11 +84,12 @@ function Calendars(props){
               };
 
               const inputName = calendar.summary;
-
+              
+              
               return (<div key={i}>
                 <span className="box" style={calendarColorStyle}></span>
                 <label>
-                  <input type="checkbox" name={inputName} value={inputName} defaultChecked />{calendar.summary}
+                  <input type="checkbox" name={inputName} value={inputName} defaultChecked={hiddenCalendars.includes(calendar.summary) ? false : true} />{calendar.summary}
                 </label>
               </div>
             )}
