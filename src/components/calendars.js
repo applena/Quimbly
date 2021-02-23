@@ -56,22 +56,29 @@ function Calendars(props){
 
   const updateCalendarList = (e) => {
     let chosenCalendar = e.target.name;
-    let hiddenCalendars = props.config.hiddenCalendars;
+    // let hiddenCalendarsRedux = props.config.hiddenCalendars;
     console.log('1. calendar: updateCalendarList', hiddenCalendars)
+    
+    console.log('2 calendar: updateCalendarList after redux', hiddenCalendars)
+    let newHiddenCalendars = [];
+    
+    !hiddenCalendars.includes(chosenCalendar) ? 
+    hiddenCalendars.push(chosenCalendar) : 
+    newHiddenCalendars = hiddenCalendars.filter(cal => cal !== chosenCalendar);
+    
+    setHiddenCalendars(newHiddenCalendars);
+    console.log('3. calendar: updateCalendarList after updating state', {hiddenCalendars})
+    
     // update the hiddenCalendar in redux
     props.toggleHideCalendar(chosenCalendar);
 
-    console.log('2 calendar: updateCalendarList after redux', hiddenCalendars)
+    // saveConfig({hiddenCalendars}, props.myQCalendar.id);
 
-    !hiddenCalendars.includes(chosenCalendar) ? 
-    hiddenCalendars.push(chosenCalendar) : 
-    hiddenCalendars = hiddenCalendars.filter(cal => cal !== chosenCalendar);
+  }
 
-    setHiddenCalendars(hiddenCalendars);
-    console.log('3. calendar: updateCalendarList after updating state', hiddenCalendars)
-
-    saveConfig({hiddenCalendars}, props.myQCalendar.id);
-
+  const saveSettings = (e) => {
+    e.preventDefault();
+    saveConfig({hiddenCalendars: props.config.hiddenCalendars}, props.myQCalendar.id);
   }
 
   return(
@@ -80,7 +87,7 @@ function Calendars(props){
         <div>
           <h2>Calendars</h2>
       
-          <form onChange={updateCalendarList}>
+          <form onSubmit={saveSettings} onChange={updateCalendarList}>
             {props.calendars.map((calendar, i) => {
               
               const calendarColorStyle = {
@@ -102,6 +109,7 @@ function Calendars(props){
               </div>
             )}
             )}
+            <button>Save Changes</button>
           </form>
         </div>
       }
