@@ -67,7 +67,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('All of the props in the app',this.props);
+    // console.log('All of the props in the app',this.props);
     return (
       <Layout>
         <When condition={this.state.show}>
@@ -93,7 +93,6 @@ const mapDispatchToProps = (dispatch, getState) => {
 };
 
 const mapStateToProps = state => {
-  console.log('mapstatetoprops', state);
   return {
   DailyHabits: state.reduxData.DailyHabits,
   loggedIn: state.reduxData.loggedIn,

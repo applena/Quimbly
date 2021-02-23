@@ -6,7 +6,7 @@ const cleanUp = async (calendars)=>{
 
   for(let i=0; i<badCalendars.length; i++){
     await gapi.client.calendar.calendars.delete({
-      'calendarId': calendars[i].id
+      'calendarId': badCalendars[i].id
     })
   }
 

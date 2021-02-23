@@ -37,10 +37,10 @@ export const setConfig = payload => {
 };
 
 
-export const hideCalendar = payload => {
-  console.log('in actions with', payload)
+export const toggleHideCalendar = payload => {
+  // console.log('in actions with', payload)
   return{
-    type: 'HIDECALENDAR',
+    type: 'TOGGLEHIDECALENDAR',
     payload,
   };
 }

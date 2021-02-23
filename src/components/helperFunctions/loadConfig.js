@@ -4,25 +4,25 @@ import cleanUp from './cleanUp';
 /* global gapi */
 
 async function loadConfig(calendars){
-
-  console.log('LOAD CONFIG', data)
-
+  console.log('loadConfig: calendars:', calendars)
   // finding the MyQ calendar if it exists
   let myQCalendar = calendars.filter(calendar => {
     return calendar.summary === 'MyQ';
   })[0];
 
+  console.log({myQCalendar})
+  
   // if myQ calendar exists, run LoadEvents which gets all the enties in the calendar with that instance
   if(myQCalendar){
-
+    
     let config = JSON.parse(myQCalendar.description);
-    console.log('LOAD CONFIG _ HIDDEN CALENDARS:', config.hiddenCalendars);
+    console.log({config});
 
-    const badData = config.hiddenCalendars.length === undefined;
+    const badData = config.hiddenCalendars.length === 0;
+    console.log('badData', badData)
     if(badData){
       calendars = await cleanUp(calendars);
     } else {
-      console.log('LOAD CONFIG:', config);
       return {config, myQCalendar};
     }
 
@@ -37,7 +37,6 @@ async function loadConfig(calendars){
   // create a calendar config event
   
   myQCalendar = response.result;
-  console.log('LOAD CONFIG: new myQ, calendars', calendars)
   
   return {config: data.config, myQCalendar};         
 

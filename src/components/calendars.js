@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import loadConfig from './helperFunctions/loadConfig';
-import data from '../store/data';
-import {setCalendars, hideCalendar, setConfig, setMyQCalendar} from '../store/actions';
+import {setCalendars, toggleHideCalendar, setConfig, setMyQCalendar} from '../store/actions';
 import saveConfig from './helperFunctions/saveConfig';
 /* global gapi */
 
 function Calendars(props){
+  console.log('calendars', props)
   const [hiddenCalendars, setHiddenCalendars] = useState([]);
 
   // need to wait until a user is signed in to call this function
   useEffect(() => {
-    console.log('calendar:useEffect');
     gapi.client.calendar.calendarList.list()
       .then(function(response) {
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         let calendars = response.result.items;
-        console.log('CALENDAR: ComponentdidMount, calendars', calendars )
         updateConfig(calendars);
-    })
-  }, [])
-
-  const updateConfig = async (calendars) => {
-    // alphabetize and store in app data
-    calendars.sort((a, b) => {
-      return a.summary > b.summary ? 1 : -1;
-    });
-
-    // set the calendars in redux
-    // this.props.setCalendars(calendars);
-
-    // ensures the myQ calendar exists
+      });
+    }, [])
+    
+    const updateConfig = async (calendars) => {
+      // alphabetize and store in app data
+      calendars.sort((a, b) => {
+        return a.summary > b.summary ? 1 : -1;
+      });
+      
+      // set the calendars in redux
+      // this.props.setCalendars(calendars);
+      
+      // ensures the myQ calendar exists
+    console.log('useEffect', calendars)
     const {config, myQCalendar} = await loadConfig(calendars);
 
     // put the hidden calendars in state
@@ -56,16 +55,25 @@ function Calendars(props){
   }
 
   const updateCalendarList = (e) => {
-    let excludedCalendar = e.target.name;
-    props.hideCalendar(excludedCalendar);
+    let chosenCalendar = e.target.name;
+    let hiddenCalendars = props.config.hiddenCalendars;
+    console.log('1. calendar: updateCalendarList', hiddenCalendars)
+    // update the hiddenCalendar in redux
+    props.toggleHideCalendar(chosenCalendar);
 
-    data.config.hiddenCalendars.push(excludedCalendar);
+    console.log('2 calendar: updateCalendarList after redux', hiddenCalendars)
 
-    saveConfig(data.config, props.myQCalendar.id);
+    !hiddenCalendars.includes(chosenCalendar) ? 
+    hiddenCalendars.push(chosenCalendar) : 
+    hiddenCalendars = hiddenCalendars.filter(cal => cal !== chosenCalendar);
+
+    setHiddenCalendars(hiddenCalendars);
+    console.log('3. calendar: updateCalendarList after updating state', hiddenCalendars)
+
+    saveConfig({hiddenCalendars}, props.myQCalendar.id);
 
   }
 
-  // console.log('CALENDARS:', props)
   return(
     <div>
       { props.calendars.length &&
@@ -102,13 +110,15 @@ function Calendars(props){
 }
 
 
-const mapDispatchToProps = {setCalendars, hideCalendar, setConfig, setMyQCalendar};
+const mapDispatchToProps = {setCalendars, toggleHideCalendar, setConfig, setMyQCalendar};
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => {
+  console.log('calendar: mapStateToProps:', state);
+  return ({
   calendars: state.reduxData.calendars,
   config: state.reduxData.config,
-  myQCalendar: state.reduxData.myQCalendar
-});
+  myQCalendar: state.reduxData.myQCalendar})
+};
 
 export default connect(
   mapStateToProps,
