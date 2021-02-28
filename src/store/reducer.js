@@ -21,6 +21,9 @@ export default (state = reduxData, action) => {
       // console.log('SETCALENDARS:', payload)
       return {...state, calendars:payload};
 
+    case 'SETEVENTS':
+      return {...state, events:payload}
+
     case 'SETMYQCALENDAR':
       // console.log('SETMYQCALENDAR:', payload)
       return {...state, myQCalendar:payload};

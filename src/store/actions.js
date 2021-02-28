@@ -1,5 +1,5 @@
 export const addDailyTasks = payload => {
-  console.log('in actions with', payload)
+  // console.log('in actions with', payload)
   return {
     type: 'ADDDAILYTASKS',
     payload,
@@ -7,7 +7,7 @@ export const addDailyTasks = payload => {
 };
 
 export const setDailyTasks = payload => {
-  console.log('in actions with', payload)
+  // console.log('in actions with', payload)
   return {
     type: 'SETDAILYTASKS',
     payload,
@@ -15,21 +15,21 @@ export const setDailyTasks = payload => {
 };
 
 export const setCalendars = payload => {
-  console.log('in setCalendars actions with', payload)
+  // console.log('in setCalendars actions with', payload)
   return {
     type: 'SETCALENDARS',
     payload,
   };
 };
 export const setMyQCalendar = payload => {
-  console.log('in setMyQCalendar actions with', payload)
+  // console.log('in setMyQCalendar actions with', payload)
   return {
     type: 'SETMYQCALENDAR',
     payload,
   };
 };
 export const setConfig = payload => {
-  console.log('in setConfig actions with', payload)
+  // console.log('in setConfig actions with', payload)
   return {
     type: 'SETCONFIG',
     payload,
@@ -49,6 +49,14 @@ export const setUser = payload => {
   console.log('in actions with', payload)
   return {
     type: 'SETUSER',
+    payload,
+  };
+};
+
+export const setEvents = payload => {
+  console.log('in setEvents actions with', payload)
+  return {
+    type: 'SETEVENTS',
     payload,
   };
 };

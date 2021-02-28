@@ -14,7 +14,7 @@ function LoadEvents(calendar, config={}){
 
   return gapi.client.calendar.events.list(listConfig)
     .then(function(response) {
-      console.log('my respoonse', response.result.items);
+      // console.log('my respoonse', response.result.items);
       
       // list of events: response.result.items
         // map over this and sort into categories
@@ -36,13 +36,6 @@ function LoadEvents(calendar, config={}){
       // calendar.eventsLoaded = true;
     });
 }
-
-// const mapStateToProps = state => ({
-//   dailyTasks: state.dailyTasks,
-//   dailyPersonalGrowth: state.dailyPersonalGrowth,
-//   personalToDos: state.personalToDos,
-//   professionalToDos: state.professionalToDos
-// });
 
 export default LoadEvents;
 

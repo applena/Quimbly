@@ -1,7 +1,7 @@
 const reduxData = {
-  DailyTasks: [],
+  dailyTasks: [],
   calendars: [],
-  User: 'bob',
+  user: 'bob',
   loggedIn: false,
   config: {
     hiddenCalendars: []
