@@ -1,3 +1,5 @@
+/* global gapi, appendPre */
+
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-bootstrap/Modal';
@@ -10,47 +12,42 @@ import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
 
 function AddEvent() {
+  const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
   const [location, setEventLocation] = useState('');
   const [description, setDescription] = useState('');
-  const [startTimeZone, setStartTimeZone] = useState('');
-  const [endTimeZone, setEndTimeZone] = useState('');
-  const [value, setValue] = useState(new Date());
+  const [value, setValue] = useState('');
 
   const handleClose = () => setShow(false);
 
   const saveEvent = () => {
     // const newEvent = {
     //   eventName,
-    //   date: date, Sun Mar 14 2021 17:37:28 GMT-0700
+    //   date: date,  // Sun Mar 14 2021 17:37:28 GMT-0700
     //   startTime, "08:00"
     //   endTime,
     //   startTimeZone: date.toString().substring(33, 60),
     // }
-    console.log(date.toISOString(), date);
+
+    console.log({value}, value.toISOString(), date);
     const event = {
       'summary': eventName,
       'location': location,
       'description': description,
       'start': {
-        'dateTime': '2015-05-28T09:00:00-07:00',
+        'dateTime': value.toISOString(),//'2015-05-28T09:00:00-07:00',
         'timeZone': date.toString().substring(33, 60)
       },
       'end': {
-        'dateTime': '2015-05-28T17:00:00-07:00',
-        'timeZone': 'America/Los_Angeles'
+        'dateTime': value.toISOString(),//'2015-05-28T17:00:00-07:00', TODO - add an hour
+        'timeZone': date.toString().substring(33, 60)
       },
       'recurrence': [
         'RRULE:FREQ=DAILY;COUNT=2'
       ],
-      'attendees': [
-        {'email': 'lpage@example.com'},
-        {'email': 'sbrin@example.com'}
-      ],
+      'attendees': attendeeEmail,
       'reminders': {
         'useDefault': false,
         'overrides': [
@@ -59,15 +56,17 @@ function AddEvent() {
         ]
       }
     };
+
+    console.log({event})
     
-    // var request = gapi.client.calendar.events.insert({
-    //   'calendarId': 'primary',
-    //   'resource': event
-    // });
+    const request = gapi.client.calendar.events.insert({
+      'calendarId': 'myQ',
+      'resource': event
+    });
     
-    // request.execute(function(event) {
-    //   appendPre('Event created: ' + event.htmlLink);
-    // });
+    request.execute(function(event) {
+      appendPre('Event created: ' + event.htmlLink);
+    });
   }
 
 
@@ -116,14 +115,18 @@ function AddEvent() {
                   onChange={setEndTime}
                   value={endTime}
                   disableClock={true}
-                /> */}
-              {/* </Form.Group> */}
+                />
+              </Form.Group> */}
               <Form.Group controlId="formDate">
                 <label>Date</label>
                 <DateTimePicker
                   onChange={setValue}
                   value={value}
                 />
+              </Form.Group>
+              <Form.Group controlId="formEmailInvite">
+                <label>Email of Attendee</label>
+                <Form.Control onChange={(e) => setAttendeeEmail([{email: e.target.value}])} type="text" placeholder="Enter Attendee Email" />
               </Form.Group>
               <Form.Group controlId="formRecurringEvent">
                 <Form.Check type="checkbox" label="Recurring Event" />

@@ -1,7 +1,6 @@
 import { render } from "react-dom";
 
 import React from 'react';
-import AddEvent from './addEvent';
 import './upcomingEvents.scss';
 
 function UpcomingEvents(events) {
@@ -19,7 +18,6 @@ function UpcomingEvents(events) {
         ))}
       </ul>
 
-      <AddEvent />
     </>
   )
 }

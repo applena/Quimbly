@@ -11,6 +11,7 @@ import loadConfig from './components/helperFunctions/loadConfig';
 import {setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn} from './store/actions';
 import * as parallel from 'async-parallel';
 import UpcomingEvents from './components/upcomingEvents';
+import AddEvent from './components/addEvent';
 
 
 function App(props) {
@@ -191,6 +192,7 @@ function App(props) {
             {events.length &&
               <UpcomingEvents events={events} />
             }
+            <AddEvent />
           </When>
         </div>
       </When>
