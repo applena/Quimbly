@@ -1,35 +1,28 @@
-/* global gapi, appendPre */
+/* global gapi */
 
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import DatePicker from "react-datepicker";
-import TimePicker from 'react-time-picker'
 import "react-datepicker/dist/react-datepicker.css";
+import { connect } from 'react-redux';
+import {setCalendars, toggleHideCalendar, setConfig, setMyQCalendar} from '../store/actions';
 
 import DateTimePicker from 'react-datetime-picker';
 
-function AddEvent() {
+function AddEvent(props) {
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState(new Date());
   const [location, setEventLocation] = useState('');
   const [description, setDescription] = useState('');
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(new Date());
 
   const handleClose = () => setShow(false);
 
   const saveEvent = () => {
-    // const newEvent = {
-    //   eventName,
-    //   date: date,  // Sun Mar 14 2021 17:37:28 GMT-0700
-    //   startTime, "08:00"
-    //   endTime,
-    //   startTimeZone: date.toString().substring(33, 60),
-    // }
 
     console.log({value}, value.toISOString(), date);
     const event = {
@@ -38,11 +31,11 @@ function AddEvent() {
       'description': description,
       'start': {
         'dateTime': value.toISOString(),//'2015-05-28T09:00:00-07:00',
-        'timeZone': date.toString().substring(33, 60)
+        'timeZone': date.toString().match(/[A-Z]{3}/)[0]
       },
       'end': {
         'dateTime': value.toISOString(),//'2015-05-28T17:00:00-07:00', TODO - add an hour
-        'timeZone': date.toString().substring(33, 60)
+        'timeZone': date.toString().match(/[A-Z]{3}/)[0]
       },
       'recurrence': [
         'RRULE:FREQ=DAILY;COUNT=2'
@@ -60,12 +53,12 @@ function AddEvent() {
     console.log({event})
     
     const request = gapi.client.calendar.events.insert({
-      'calendarId': 'myQ',
+      'calendarId': props.myQCalendar.id,
       'resource': event
     });
     
     request.execute(function(event) {
-      appendPre('Event created: ' + event.htmlLink);
+      console.log('Event created: ' + event.htmlLink);
     });
   }
 
@@ -122,6 +115,7 @@ function AddEvent() {
                 <DateTimePicker
                   onChange={setValue}
                   value={value}
+                  disableClock={true}
                 />
               </Form.Group>
               <Form.Group controlId="formEmailInvite">
@@ -144,4 +138,17 @@ function AddEvent() {
   )
 }
 
-export default AddEvent;
+const mapDispatchToProps = {setCalendars, toggleHideCalendar, setConfig, setMyQCalendar};
+
+const mapStateToProps = state => {
+  console.log('calendar: mapStateToProps:', state);
+  return ({
+  calendars: state.reduxData.calendars,
+  config: state.reduxData.config,
+  myQCalendar: state.reduxData.myQCalendar})
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddEvent);
