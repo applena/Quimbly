@@ -137,7 +137,7 @@ function AddEvent(props) {
                     <option>Yearly</option>
                   </Form.Control>
 
-                  <Form.label>Ends On</Form.label>
+                  <Form.Label>Ends On</Form.Label>
                   <DateTimePicker
                     onChange={setRecurringValue}
                     value={recurringValue}
