@@ -31,6 +31,36 @@ function App(props) {
 
     document.body.appendChild(script);
 
+    const updateConfig = useCallback(async (calendars) => {
+      // alphabetize and store in app data
+      calendars.sort((a, b) => {
+        return a.summary > b.summary ? 1 : -1;
+      });
+
+      // ensures the myQ calendar exists
+      const { config, myQCalendar } = await loadConfig(calendars);
+
+      // put the hidden calendars in state
+      const hiddenCalendars = JSON.parse(myQCalendar.description);
+      setHiddenCalendars(hiddenCalendars.hiddenCalendars);
+
+      const visCal = calendars.filter(cal => !hiddenCalendars.hiddenCalendars.includes(cal.summary));
+      setVisibleCalendars(visCal);
+      listUpcomingEvents(visCal);
+      // console.log({visCal},calendars, hiddenCalendars.hiddenCalendars);
+
+      // set the config in redux to the config
+      props.setConfig(config);
+      props.setMyQCalendar(myQCalendar);
+      if (!calendars.find(c => c.summary === 'MyQ')) {
+        props.setCalendars([...calendars, myQCalendar]);
+      } else {
+        props.setCalendars(calendars);
+      }
+
+      setShowCalendars(true);
+    }, [props, listUpcomingEvents])
+
     // once the google library is loaded...
     script.onload = () => {
       gapi.load('client:auth2', function initClient() {
@@ -69,36 +99,6 @@ function App(props) {
       });
     };
   }, [props, updateConfig])
-
-  const updateConfig = useCallback(async (calendars) => {
-    // alphabetize and store in app data
-    calendars.sort((a, b) => {
-      return a.summary > b.summary ? 1 : -1;
-    });
-
-    // ensures the myQ calendar exists
-    const { config, myQCalendar } = await loadConfig(calendars);
-
-    // put the hidden calendars in state
-    const hiddenCalendars = JSON.parse(myQCalendar.description);
-    setHiddenCalendars(hiddenCalendars.hiddenCalendars);
-
-    const visCal = calendars.filter(cal => !hiddenCalendars.hiddenCalendars.includes(cal.summary));
-    setVisibleCalendars(visCal);
-    listUpcomingEvents(visCal);
-    // console.log({visCal},calendars, hiddenCalendars.hiddenCalendars);
-
-    // set the config in redux to the config
-    props.setConfig(config);
-    props.setMyQCalendar(myQCalendar);
-    if (!calendars.find(c => c.summary === 'MyQ')) {
-      props.setCalendars([...calendars, myQCalendar]);
-    } else {
-      props.setCalendars(calendars);
-    }
-
-    setShowCalendars(true);
-  }, [])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
