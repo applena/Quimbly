@@ -21,6 +21,38 @@ function App(props) {
   const [showCalendars, setShowCalendars] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
 
+  const listUpcomingEvents = async (visibleCalendars) => {
+    console.log('listUpcomingEvents', visibleCalendars);
+
+    const promiseArray = await generatePromiseArray(visibleCalendars);
+
+
+    let allEvents = await parallel.map(promiseArray, async apiCall => {
+      const response = await apiCall();
+      return response.result.items;
+    });
+
+    allEvents = allEvents.map((eventArray, idx) => {
+      return eventArray.map(event => ({
+        calendar: visibleCalendars[idx].summary,
+        color: visibleCalendars[idx].backgroundColor,
+        event: event.summary,
+        startTime: event.start.dateTime ? event.start.dateTime : event.start.date,
+        endTime: event.end.dateTime ? event.end.dateTime : event.end.date
+      }))
+    })
+
+    allEvents = allEvents.flat()
+    console.log({ allEvents })
+
+    allEvents = allEvents.sort((a, b) => {
+      return a.startTime > b.startTime ? 1 : -1;
+    }).slice(0, 10);
+
+    setEvents(allEvents);
+    props.setEvents(allEvents);
+  }
+
   console.log('APP', { events, props, visibleCalendars })
   useEffect(() => {
     const script = document.createElement("script");
@@ -30,38 +62,6 @@ function App(props) {
     script.defer = true;
 
     document.body.appendChild(script);
-
-    const listUpcomingEvents = async (visibleCalendars) => {
-      console.log('listUpcomingEvents', visibleCalendars);
-
-      const promiseArray = await generatePromiseArray(visibleCalendars);
-
-
-      let allEvents = await parallel.map(promiseArray, async apiCall => {
-        const response = await apiCall();
-        return response.result.items;
-      });
-
-      allEvents = allEvents.map((eventArray, idx) => {
-        return eventArray.map(event => ({
-          calendar: visibleCalendars[idx].summary,
-          color: visibleCalendars[idx].backgroundColor,
-          event: event.summary,
-          startTime: event.start.dateTime ? event.start.dateTime : event.start.date,
-          endTime: event.end.dateTime ? event.end.dateTime : event.end.date
-        }))
-      })
-
-      allEvents = allEvents.flat()
-      console.log({ allEvents })
-
-      allEvents = allEvents.sort((a, b) => {
-        return a.startTime > b.startTime ? 1 : -1;
-      }).slice(0, 10);
-
-      setEvents(allEvents);
-      props.setEvents(allEvents);
-    }
 
     const updateConfig = async (calendars) => {
       // alphabetize and store in app data
