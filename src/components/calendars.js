@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar } from '../store/actions';
 
 function Calendars(props) {
+  console.log('in Calendars', props)
 
   return (
     <div>
