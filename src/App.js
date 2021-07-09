@@ -98,7 +98,7 @@ function App(props) {
         });
       });
     };
-  }, [props, updateConfig])
+  }, [props])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
