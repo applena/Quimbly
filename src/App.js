@@ -93,12 +93,12 @@ function App(props) {
             .then(function (response) {
               //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
               let calendars = response.result.items;
-              updateConfig(calendars);
+              useCallback(calendars);
             });
         });
       });
     };
-  }, [props, updateConfig])
+  }, [props])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
