@@ -1,6 +1,6 @@
 /* global gapi */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from './components/layout';
 import Calendars from './components/calendars';
 import User from './components/user';
@@ -31,7 +31,7 @@ function App(props) {
 
     document.body.appendChild(script);
 
-    const updateConfig = useCallback(async (calendars) => {
+    const updateConfig = async (calendars) => {
       // alphabetize and store in app data
       calendars.sort((a, b) => {
         return a.summary > b.summary ? 1 : -1;
@@ -59,7 +59,7 @@ function App(props) {
       }
 
       setShowCalendars(true);
-    }, [props, listUpcomingEvents])
+    }
 
     // once the google library is loaded...
     script.onload = () => {
@@ -93,12 +93,12 @@ function App(props) {
             .then(function (response) {
               //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
               let calendars = response.result.items;
-              useCallback(calendars);
+              updateConfig(calendars);
             });
         });
       });
     };
-  }, [props])
+  }, [props, updateConfig])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
