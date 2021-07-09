@@ -1,6 +1,6 @@
 /* global gapi */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Layout from './components/layout';
 import Calendars from './components/calendars';
 import User from './components/user';
