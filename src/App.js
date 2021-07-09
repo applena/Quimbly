@@ -1,6 +1,6 @@
 /* global gapi */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from './components/layout';
 import Calendars from './components/calendars';
 import User from './components/user';
@@ -13,6 +13,48 @@ import * as parallel from 'async-parallel';
 import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 
+const generatePromiseArray = async (visibleCalendars) => {
+  return visibleCalendars.map(calendar => async () => gapi.client.calendar.events.list({
+    'calendarId': calendar.id,
+    'timeMin': (new Date()).toISOString(),
+    'showDeleted': false,
+    'singleEvents': true,
+    'maxResults': 10,
+    'orderBy': 'startTime'
+  }));
+}
+
+const listUpcomingEvents = async (visibleCalendars, props, setEvents) => {
+  console.log('listUpcomingEvents', visibleCalendars);
+
+  const promiseArray = await generatePromiseArray(visibleCalendars);
+
+
+  let allEvents = await parallel.map(promiseArray, async apiCall => {
+    const response = await apiCall();
+    return response.result.items;
+  });
+
+  allEvents = allEvents.map((eventArray, idx) => {
+    return eventArray.map(event => ({
+      calendar: visibleCalendars[idx].summary,
+      color: visibleCalendars[idx].backgroundColor,
+      event: event.summary,
+      startTime: event.start.dateTime ? event.start.dateTime : event.start.date,
+      endTime: event.end.dateTime ? event.end.dateTime : event.end.date
+    }))
+  })
+
+  allEvents = allEvents.flat()
+  console.log({ allEvents })
+
+  allEvents = allEvents.sort((a, b) => {
+    return a.startTime > b.startTime ? 1 : -1;
+  }).slice(0, 10);
+
+  setEvents(allEvents);
+  props.setEvents(allEvents);
+}
 
 function App(props) {
   const [events, setEvents] = useState([]);
@@ -20,38 +62,6 @@ function App(props) {
   const [show, setShow] = useState(false);
   const [showCalendars, setShowCalendars] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
-
-  const listUpcomingEvents = useCallback(async (visibleCalendars) => {
-    console.log('listUpcomingEvents', visibleCalendars);
-
-    const promiseArray = await generatePromiseArray(visibleCalendars);
-
-
-    let allEvents = await parallel.map(promiseArray, async apiCall => {
-      const response = await apiCall();
-      return response.result.items;
-    });
-
-    allEvents = allEvents.map((eventArray, idx) => {
-      return eventArray.map(event => ({
-        calendar: visibleCalendars[idx].summary,
-        color: visibleCalendars[idx].backgroundColor,
-        event: event.summary,
-        startTime: event.start.dateTime ? event.start.dateTime : event.start.date,
-        endTime: event.end.dateTime ? event.end.dateTime : event.end.date
-      }))
-    })
-
-    allEvents = allEvents.flat()
-    console.log({ allEvents })
-
-    allEvents = allEvents.sort((a, b) => {
-      return a.startTime > b.startTime ? 1 : -1;
-    }).slice(0, 10);
-
-    setEvents(allEvents);
-    props.setEvents(allEvents);
-  }, [props])
 
   console.log('APP', { events, props, visibleCalendars })
   useEffect(() => {
@@ -78,7 +88,7 @@ function App(props) {
 
       const visCal = calendars.filter(cal => !hiddenCalendars.hiddenCalendars.includes(cal.summary));
       setVisibleCalendars(visCal);
-      listUpcomingEvents(visCal);
+      listUpcomingEvents(visCal, props, setEvents);
       // console.log({visCal},calendars, hiddenCalendars.hiddenCalendars);
 
       // set the config in redux to the config
@@ -132,7 +142,7 @@ function App(props) {
         });
       });
     };
-  }, [props, listUpcomingEvents])
+  }, [props])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
@@ -164,17 +174,6 @@ function App(props) {
 
     // update the list of events
     listUpcomingEvents(newVisibleCalendars);
-  }
-
-  const generatePromiseArray = async (visibleCalendars) => {
-    return visibleCalendars.map(calendar => async () => gapi.client.calendar.events.list({
-      'calendarId': calendar.id,
-      'timeMin': (new Date()).toISOString(),
-      'showDeleted': false,
-      'singleEvents': true,
-      'maxResults': 10,
-      'orderBy': 'startTime'
-    }));
   }
 
   const updateCalendars = () => setShowCalendars(true);
