@@ -70,7 +70,7 @@ function App(props) {
     };
   }, [props, updateConfig])
 
-  const updateConfig = async (calendars) => {
+  const updateConfig = useCallback(async (calendars) => {
     // alphabetize and store in app data
     calendars.sort((a, b) => {
       return a.summary > b.summary ? 1 : -1;
@@ -98,7 +98,7 @@ function App(props) {
     }
 
     setShowCalendars(true);
-  }
+  }, [])
 
   const updateCalendarList = (calendar) => {
     let chosenCalendar = calendar;
