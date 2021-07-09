@@ -90,6 +90,7 @@ function App(props) {
         props.setCalendars(calendars);
       }
 
+      console.log('setting showCalendars to true')
       setShowCalendars(true);
     }
 
@@ -107,6 +108,7 @@ function App(props) {
           const onLoggedIn = () => {
             console.log('user is signed in');
             props.isLoggedIn(true);
+            console.log('setShow is now true');
             setShow(true);
           }
 
