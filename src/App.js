@@ -1,6 +1,6 @@
 /* global gapi */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Layout from './components/layout';
 import Calendars from './components/calendars';
 import User from './components/user';
@@ -21,7 +21,7 @@ function App(props) {
   const [showCalendars, setShowCalendars] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
 
-  const listUpcomingEvents = async (visibleCalendars) => {
+  const listUpcomingEvents = useCallback(async (visibleCalendars) => {
     console.log('listUpcomingEvents', visibleCalendars);
 
     const promiseArray = await generatePromiseArray(visibleCalendars);
@@ -51,7 +51,7 @@ function App(props) {
 
     setEvents(allEvents);
     props.setEvents(allEvents);
-  }
+  }, [props])
 
   console.log('APP', { events, props, visibleCalendars })
   useEffect(() => {
