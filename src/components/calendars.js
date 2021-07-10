@@ -1,11 +1,13 @@
 
 
-import React from 'react';
+import { React, useState } from 'react';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar } from '../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
+import updateCalendarList from '../lib/updateCalendarList';
 
 function Calendars(props) {
   console.log('in Calendars', props)
+  const [hiddenCalendars, setHiddenCalendars] = useState(props.config.hiddenCalendars);
 
   return (
     <div>
@@ -13,7 +15,7 @@ function Calendars(props) {
         <div>
           <h2>Calendars</h2>
 
-          <form onChange={(e) => props.updateCalendarList(e.target.name)}>
+          <form onChange={(e) => updateCalendarList(e.target.name, props.setVisibleCalendars, setHiddenCalendars, hiddenCalendars)}>
             {props.calendars.map((calendar, i) => {
 
               const calendarColorStyle = {
@@ -43,16 +45,18 @@ function Calendars(props) {
   )
 }
 
-
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  // console.log('calendar: mapStateToProps:', state);
-  return ({
+  // console.log('mapStateToProps', state)
+  return {
+    DailyHabits: state.reduxData.DailyHabits,
+    loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    myQCalendar: state.reduxData.myQCalendar
-  })
+    myQCalendar: state.reduxData.myQCalendar,
+    events: state.reduxData.events
+  }
 };
 
 export default connect(
