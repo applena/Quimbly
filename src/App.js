@@ -32,6 +32,7 @@ function App(props) {
       scope: 'https://www.googleapis.com/auth/calendar'
     }).then(() => {
       calApiLoaded = true;
+      console.log(calApiLoaded);
       console.log('got info back from init')
       const isLoggedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 
