@@ -1,5 +1,4 @@
 import loadConfig from '../components/helperFunctions/loadConfig';
-// import listUpcomingEvents from './listUpcomingEvents';
 
 const updateConfig = async ({ calendars, setHiddenCalendars, setVisibleCalendars, setEvents, props }) => {
   console.log('updateConfig', { calendars, setHiddenCalendars, setVisibleCalendars, setEvents, props })
@@ -17,8 +16,6 @@ const updateConfig = async ({ calendars, setHiddenCalendars, setVisibleCalendars
 
   const visCal = calendars.filter(cal => !hiddenCalendars.hiddenCalendars.includes(cal.summary));
   setVisibleCalendars(visCal);
-  // listUpcomingEvents(visCal, props, setEvents);
-  // console.log({visCal},calendars, hiddenCalendars.hiddenCalendars);
 
   // set the config in redux to the config
   props.setConfig(config);

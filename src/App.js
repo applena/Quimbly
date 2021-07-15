@@ -7,11 +7,10 @@ import User from './components/user';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from './store/actions';
 import UpcomingEvents from './components/upcomingEvents';
+import AddEvent from './components/addEvent';
+import loadConfig from './components/helperFunctions/loadConfig';
 
-import listUpcomingEvents from './lib/listUpcomingEvents';
-import updateConfig from './lib/updateConfig';
-let calApiLoaded;
-let calApiLoading;
+let scriptAdded;
 
 
 function App(props) {
@@ -28,16 +27,26 @@ function App(props) {
       clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
       scope: 'https://www.googleapis.com/auth/calendar'
     }).then(() => {
-      calApiLoaded = true;
-      console.log(calApiLoaded);
       console.log('got info back from init')
       const isLoggedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 
-      const onLoggedIn = () => {
+      const onLoggedIn = async () => {
         console.log('user is signed in');
         props.isLoggedIn(true);
-        console.log('setShow is now true');
+
+        // get all the calendars
+        const response = await gapi.client.calendar.calendarList.list();
+        console.log({ response })
+        //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
+        // TODO: loading annimation
+        let calendars = response.result.items;
+        console.log({ calendars })
+        await loadConfig(calendars);
+        props.setCalendars(calendars);
+        console.log('calendars loaded')
+
         setShow(true);
+        console.log('setShow is now true');
       }
 
       // if the user is not logged in, log them into google and load their calendars with events
@@ -51,22 +60,14 @@ function App(props) {
       // if they are already logged in, load their calendars with events
       onLoggedIn();
 
-      // get all the calendars
-      gapi.client.calendar.calendarList.list()
-        .then(async (response) => {
-          //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
-          let calendars = response.result.items;
-          await updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, props });
-          listUpcomingEvents(visibleCalendars, props);
-        });
-    });
+    })
   }, [props, visibleCalendars]);
 
   // Load the SDK asynchronously
   // Adds google API script tag and loads the SDK
   // Gives you a window event that you can bind to
   const loadGoogleSDK = useCallback(() => {
-    calApiLoading = true;
+    scriptAdded = true;
     let js;
     let firstScriptTag = document.getElementsByTagName('script')[0];
     if (document.getElementById('google-jssdk')) {
@@ -85,7 +86,7 @@ function App(props) {
     window.onGoogleLoad = () => {
       window.gapi.load('client', initClient);
     }
-    if (!calApiLoading) {
+    if (!scriptAdded) {
       loadGoogleSDK();
     }
   }, [initClient, loadGoogleSDK]);
@@ -96,17 +97,17 @@ function App(props) {
         <div>
           <User />
           <Calendars
-            showCalendars={() => setShow(true)}
             setVisibleCalendars={setVisibleCalendars}
           />
-          {props.events.length > 1 &&
+          {props.events && props.events.length > 1 &&
             <UpcomingEvents />
           }
+          <AddEvent />
         </div>
       }
     </Layout>
   );
-}
+};
 
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 

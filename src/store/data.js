@@ -1,6 +1,7 @@
 const reduxData = {
   dailyTasks: [],
   calendars: [],
+  events: [],
   user: 'bob',
   loggedIn: false,
   config: {
@@ -8,6 +9,7 @@ const reduxData = {
   },
   myQCalendar: {}
 };
+
 window.reduxData = reduxData;
 
 export default reduxData;

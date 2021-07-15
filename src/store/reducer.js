@@ -30,6 +30,7 @@ const reducer = (state = reduxData, action) => {
 
     case 'TOGGLEHIDECALENDAR':
       // if the payload is in the hiddenCalendars, remove it - otherwise add it
+      // the payload is the id of the hidden calendar
       let hiddenCalendars = state.config.hiddenCalendars;
       if (hiddenCalendars.includes(payload)) {
         hiddenCalendars = hiddenCalendars.filter(calendar => calendar !== payload);

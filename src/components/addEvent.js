@@ -12,6 +12,7 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar } from '../
 import DateTimePicker from 'react-datetime-picker';
 
 function AddEvent(props) {
+  console.log('addEvent', { props });
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
   const [eventName, setEventName] = useState('');
@@ -20,7 +21,7 @@ function AddEvent(props) {
   const [description, setDescription] = useState('');
   const [value, setValue] = useState(new Date());
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
-  const [recurringValue, setRecurringValue] = useState(false);
+  // const [recurringValue, setRecurringValue] = useState(false);
 
   const handleClose = () => setShow(false);
 
@@ -64,7 +65,6 @@ function AddEvent(props) {
     });
   }
 
-
   return (
     <>
       <button onClick={() => setShow(true)}>Add Event To MyQ</button>
@@ -92,26 +92,6 @@ function AddEvent(props) {
                 <Form.Control onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Description" />
               </Form.Group>
 
-              {/* <Form.Group controlId="formDate">
-                <label>Date</label>
-                <DatePicker selected={date} onChange={date => setDate(date)} />
-              </Form.Group>
-              <Form.Group controlId="formStartTime">
-                <label>Start Time</label>
-                <TimePicker
-                  onChange={setStartTime}
-                  value={startTime}
-                  disableClock={true}
-                />
-              </Form.Group>
-              <Form.Group controlId="formStartTime">
-                <label>End Time</label>
-                <TimePicker
-                  onChange={setEndTime}
-                  value={endTime}
-                  disableClock={true}
-                />
-              </Form.Group> */}
               <Form.Group controlId="formDate">
                 <label>Date</label>
                 <DateTimePicker
@@ -125,7 +105,7 @@ function AddEvent(props) {
                 <Form.Control onChange={(e) => setAttendeeEmail([{ email: e.target.value }])} type="text" placeholder="Enter Attendee Email" />
               </Form.Group>
               <Form.Group controlId="formRecurringEvent">
-                <Form.Check onClick={setDisplayRecurringEvent(!displayRecurringEvent)} type="checkbox" label="Recurring Event" />
+                <Form.Check onClick={() => setDisplayRecurringEvent(!displayRecurringEvent)} type="checkbox" label="Recurring Event" />
               </Form.Group>
 
               {displayRecurringEvent &&
@@ -138,11 +118,11 @@ function AddEvent(props) {
                   </Form.Control>
 
                   <Form.Label>Ends On</Form.Label>
-                  <DateTimePicker
+                  {/* <DateTimePicker
                     onChange={setRecurringValue}
                     value={recurringValue}
                     disableClock={true}
-                  />
+                  /> */}
                 </Form.Group>
               }
             </Form>
@@ -161,7 +141,6 @@ function AddEvent(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar };
 
 const mapStateToProps = state => {
-  console.log('calendar: mapStateToProps:', state);
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,

@@ -1,5 +1,3 @@
-
-
 import { React, useState } from 'react';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
@@ -11,7 +9,7 @@ function Calendars(props) {
 
   return (
     <div>
-      {props.calendars.length &&
+      {props.calendars && props.calendars.length &&
         <div>
           <h2>Calendars</h2>
 

@@ -1,5 +1,5 @@
 import saveConfig from '../components/helperFunctions/saveConfig';
-import listUpcomingEvents from './listUpcomingEvents';
+import getUpcomingEvents from './getUpcomingEvents';
 
 const updateCalendarList = (calendar, setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props) => {
   console.log('update calendar list:', { props })
@@ -27,11 +27,11 @@ const updateCalendarList = (calendar, setVisibleCalendars, setHiddenCalendars, h
   setHiddenCalendars(newHiddenCalendars);
 
   // update redux
-  props.toggleHideCalendar(chosenCalendar);
+  props.toggleHideCalendar(chosenCalendar.id);
 
 
   // update the list of events
-  listUpcomingEvents(newVisibleCalendars, props);
+  getUpcomingEvents(props.calendars, props.config);
 }
 
 export default updateCalendarList;

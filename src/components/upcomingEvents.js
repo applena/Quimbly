@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './upcomingEvents.scss';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
+import getUpcomingEvents from '../lib/getUpcomingEvents';
 
 function UpcomingEvents(props) {
-  console.log('events', { props })
+  console.log('events', { props });
+
+  useEffect(() => {
+    getUpcomingEvents(props.calendars, props.config)
+      .then(events => {
+        props.setEvents(events);
+      })
+  }, [props.calendars, props.config]);
+
   return (
     <>
       <ul id="upcoming-events">
-        {props.events.map((event, idx) => (
+        {props.events && props.events.map((event, idx) => (
           <li style={{ borderLeft: `10px solid ${event.color}`, listStyle: 'none' }} key={idx}>
             <div>Calendar: {event.calendar}</div>
             <div>Name: {event.event}</div>
@@ -26,7 +35,7 @@ function UpcomingEvents(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  // console.log('mapStateToProps', state)
+  console.log('UPCOMINGEVENTS: mapStateToProps', state)
   return {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
