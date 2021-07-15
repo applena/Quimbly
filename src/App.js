@@ -15,14 +15,11 @@ let calApiLoading;
 
 
 function App(props) {
-  const [events, setEvents] = useState([]);
   const [hiddenCalendars, setHiddenCalendars] = useState(props.config.hiddenCalendars);
   const [show, setShow] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
 
-  // updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, setEvents, props });
-
-  console.log('APP', { events, props, visibleCalendars, hiddenCalendars, setEvents });
+  console.log('APP', { props, visibleCalendars, hiddenCalendars });
 
   // Init the Google API client
   const initClient = useCallback(() => {
@@ -59,9 +56,8 @@ function App(props) {
         .then(async (response) => {
           //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
           let calendars = response.result.items;
-          console.log('app', { props, setEvents })
           await updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, props });
-          listUpcomingEvents(visibleCalendars, props, setEvents);
+          listUpcomingEvents(visibleCalendars, props);
         });
     });
   }, [props, visibleCalendars]);
@@ -94,29 +90,6 @@ function App(props) {
     }
   }, [initClient, loadGoogleSDK]);
 
-
-
-  // useEffect(() => {
-  //   console.log('entering useEffect');
-  //   if (window.loaded) return;
-  //   window.loaded = true;
-  //   console.log('loading google');
-
-  //   // script.onload = () => {
-  //   gapi.load('client:auth2', function initClient() {
-  //     console.log('gapi load')
-  //     gapi.client.init({
-  //       discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
-  //       clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
-  //       scope: 'https://www.googleapis.com/auth/calendar'
-  //     }).then(function () {
-
-  //     }).catch(err => console.error('gapi init error', err));
-  //   });
-  //   // };
-  // }, [props, visibleCalendars])
-
-
   return (
     <Layout>
       {show &&
@@ -126,8 +99,8 @@ function App(props) {
             showCalendars={() => setShow(true)}
             setVisibleCalendars={setVisibleCalendars}
           />
-          {events.length > 1 &&
-            <UpcomingEvents events={events} />
+          {props.events.length > 1 &&
+            <UpcomingEvents />
           }
         </div>
       }

@@ -1,8 +1,7 @@
 import getEventsFromCalendars from './getEventsFromCalendars';
 import * as parallel from 'async-parallel';
 
-const listUpcomingEvents = async (visibleCalendars, props, setEvents = () => { }) => {
-  console.log('listUpcomingEvents', visibleCalendars, props, setEvents);
+const listUpcomingEvents = async (visibleCalendars, props) => {
 
   const promiseArray = await getEventsFromCalendars(visibleCalendars);
 
@@ -29,7 +28,6 @@ const listUpcomingEvents = async (visibleCalendars, props, setEvents = () => { }
     return a.startTime > b.startTime ? 1 : -1;
   }).slice(0, 10);
 
-  setEvents(allEvents);
   props.setEvents(allEvents);
 }
 
