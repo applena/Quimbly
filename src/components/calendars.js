@@ -15,7 +15,7 @@ function Calendars(props) {
         <div>
           <h2>Calendars</h2>
 
-          <form onChange={(e) => updateCalendarList(e.target.name, props.setVisibleCalendars, setHiddenCalendars, hiddenCalendars)}>
+          <form onChange={(e) => updateCalendarList(e.target.name, props.setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props)}>
             {props.calendars.map((calendar, i) => {
 
               const calendarColorStyle = {

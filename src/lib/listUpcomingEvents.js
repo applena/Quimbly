@@ -1,8 +1,8 @@
 import getEventsFromCalendars from './getEventsFromCalendars';
 import * as parallel from 'async-parallel';
 
-const listUpcomingEvents = async (visibleCalendars, props, setEvents) => {
-  console.log('listUpcomingEvents', visibleCalendars, props.setEvents);
+const listUpcomingEvents = async (visibleCalendars, props, setEvents = () => { }) => {
+  console.log('listUpcomingEvents', visibleCalendars, props, setEvents);
 
   const promiseArray = await getEventsFromCalendars(visibleCalendars);
 

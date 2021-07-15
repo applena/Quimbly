@@ -22,7 +22,7 @@ function App(props) {
 
   // updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, setEvents, props });
 
-  console.log('APP', { events, props, visibleCalendars, hiddenCalendars });
+  console.log('APP', { events, props, visibleCalendars, hiddenCalendars, setEvents });
 
   // Init the Google API client
   const initClient = useCallback(() => {
@@ -59,7 +59,8 @@ function App(props) {
         .then(async (response) => {
           //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
           let calendars = response.result.items;
-          await updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, setEvents, props });
+          console.log('app', { props, setEvents })
+          await updateConfig({ calendars, setHiddenCalendars, setVisibleCalendars, props });
           listUpcomingEvents(visibleCalendars, props, setEvents);
         });
     });

@@ -2,6 +2,7 @@ import saveConfig from '../components/helperFunctions/saveConfig';
 import listUpcomingEvents from './listUpcomingEvents';
 
 const updateCalendarList = (calendar, setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props) => {
+  console.log('update calendar list:', { props })
   let chosenCalendar = calendar;
   let newHiddenCalendars = [];
 
@@ -30,7 +31,7 @@ const updateCalendarList = (calendar, setVisibleCalendars, setHiddenCalendars, h
 
 
   // update the list of events
-  listUpcomingEvents(newVisibleCalendars);
+  listUpcomingEvents(newVisibleCalendars, props);
 }
 
 export default updateCalendarList;
