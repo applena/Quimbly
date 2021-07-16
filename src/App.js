@@ -27,7 +27,6 @@ function App(props) {
       clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
       scope: 'https://www.googleapis.com/auth/calendar'
     }).then(() => {
-      console.log('got info back from init')
       const isLoggedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 
       const onLoggedIn = async () => {
@@ -40,13 +39,11 @@ function App(props) {
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         // TODO: loading annimation
         let calendars = response.result.items;
-        console.log({ calendars })
-        await loadConfig(calendars);
+        const config = await loadConfig(calendars);
         props.setCalendars(calendars);
-        console.log('calendars loaded')
+        props.setMyQCalendar(config.myQCalendar);
 
         setShow(true);
-        console.log('setShow is now true');
       }
 
       // if the user is not logged in, log them into google and load their calendars with events
@@ -99,9 +96,7 @@ function App(props) {
           <Calendars
             setVisibleCalendars={setVisibleCalendars}
           />
-          {props.events && props.events.length > 1 &&
-            <UpcomingEvents />
-          }
+          <UpcomingEvents />
           <AddEvent />
         </div>
       }
@@ -112,7 +107,7 @@ function App(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  // console.log('mapStateToProps', state)
+  console.log('APP: mapStateToProps', state)
   return {
     DailyHabits: state.reduxData.DailyHabits,
     loggedIn: state.reduxData.loggedIn,
