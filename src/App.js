@@ -17,7 +17,7 @@ function App(props) {
   const [show, setShow] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
 
-  // console.log('APP', { props, visibleCalendars });
+  console.log('APP', { props, visibleCalendars });
 
   // Init the Google API client
   const initClient = useCallback(() => {

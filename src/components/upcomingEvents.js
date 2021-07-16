@@ -1,38 +1,46 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './upcomingEvents.scss';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
 import getUpcomingEvents from '../lib/getUpcomingEvents';
 
-function UpcomingEvents(props) {
-  console.log('events', { props });
+class UpcomingEvents extends React.Component {
 
-  useEffect(() => {
-    getUpcomingEvents(props.calendars, props.config)
+  componentDidMount() {
+    getUpcomingEvents(this.props.calendars, this.props.config)
       .then(events => {
-        props.setEvents(events);
+        this.props.setEvents(events);
       })
-  }, [props.calendars, props.config]);
+  };
 
-  return (
-    <>
-      <ul id="upcoming-events">
-        {props.events && props.events.map((event, idx) => (
-          <li style={{ borderLeft: `10px solid ${event.color}`, listStyle: 'none' }} key={idx}>
-            <div>Calendar: {event.calendar}</div>
-            <div>Name: {event.event}</div>
-            <div>Date: {new Date(event.startTime).toLocaleDateString()}</div>
-            <div>Start Time: {new Date(event.startTime).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</div>
-            <div>End Time: {new Date(event.endTime).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</div>
-          </li>
-        ))}
-      </ul>
+  render() {
+    return (
+      <>
+        <ul id="upcoming-events">
+          {this.props.events && this.props.events.map((event, idx) => (
+            <li style={{ borderLeft: `10px solid ${event.color}`, listStyle: 'none' }} key={idx}>
+              <div>Calendar: {event.calendar}</div>
+              <div>Name: {event.event}</div>
+              <div>Date: {new Date(event.startTime).toLocaleDateString()}</div>
+              <div>Start Time: {new Date(event.startTime).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</div>
+              <div>End Time: {new Date(event.endTime).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            </li>
+          ))}
+        </ul>
 
-    </>
-  )
+      </>
+    )
+  }
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // dispatching plain actions
+    setCalendars: () => dispatch({ type: 'SETCALENDARS' }),
+    setMyQCalendar: () => dispatch({ type: 'SETMYQCALENDAR' }),
+    setConfig: () => dispatch({ type: 'SETCONFIG' }),
+    setEvents: () => dispatch({ type: 'SETEVENTS' })
+  }
+}
 
 const mapStateToProps = state => {
   // console.log('UPCOMINGEVENTS: mapStateToProps', state)
