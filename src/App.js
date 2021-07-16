@@ -14,11 +14,10 @@ let scriptAdded;
 
 
 function App(props) {
-  const [hiddenCalendars, setHiddenCalendars] = useState(props.config.hiddenCalendars);
   const [show, setShow] = useState(false);
   const [visibleCalendars, setVisibleCalendars] = useState([]);
 
-  console.log('APP', { props, visibleCalendars, hiddenCalendars });
+  // console.log('APP', { props, visibleCalendars });
 
   // Init the Google API client
   const initClient = useCallback(() => {
@@ -30,16 +29,17 @@ function App(props) {
       const isLoggedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 
       const onLoggedIn = async () => {
-        console.log('user is signed in');
+        // console.log('user is signed in');
         props.isLoggedIn(true);
 
         // get all the calendars
         const response = await gapi.client.calendar.calendarList.list();
-        console.log({ response })
+        // console.log({ response })
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         // TODO: loading annimation
         let calendars = response.result.items;
         const config = await loadConfig(calendars);
+        props.setConfig(config.config);
         props.setCalendars(calendars);
         props.setMyQCalendar(config.myQCalendar);
 
@@ -49,7 +49,7 @@ function App(props) {
       // if the user is not logged in, log them into google and load their calendars with events
       if (!isLoggedIn) {
         // Listen for sign-in state changes.
-        console.log('not logged in')
+        // console.log('not logged in')
         gapi.auth2.getAuthInstance().isSignedIn.listen(onLoggedIn);
         return gapi.auth2.getAuthInstance().signIn();
       }
@@ -58,7 +58,7 @@ function App(props) {
       onLoggedIn();
 
     })
-  }, [props, visibleCalendars]);
+  }, [props]);
 
   // Load the SDK asynchronously
   // Adds google API script tag and loads the SDK
@@ -107,7 +107,7 @@ function App(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  console.log('APP: mapStateToProps', state)
+  // console.log('APP: mapStateToProps', state)
   return {
     DailyHabits: state.reduxData.DailyHabits,
     loggedIn: state.reduxData.loggedIn,

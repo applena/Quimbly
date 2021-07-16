@@ -30,7 +30,7 @@ function Calendars(props) {
               return (<div key={i}>
                 <span className="box" style={calendarColorStyle}></span>
                 <label>
-                  <input type="checkbox" id={calendar.id} name={inputName} value={inputName} defaultChecked={props.config.hiddenCalendars.includes(calendar.summary) ? false : true} />{calendar.summary}
+                  <input type="checkbox" id={calendar.id} name={inputName} value={inputName} defaultChecked={props.config.hiddenCalendars.includes(calendar.id) ? false : true} />{calendar.summary}
                 </label>
               </div>
               )
@@ -46,7 +46,7 @@ function Calendars(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  console.log('CALENDARS: mapStateToProps', state)
+  // console.log('CALENDARS: mapStateToProps', state)
   return {
     DailyHabits: state.reduxData.DailyHabits,
     loggedIn: state.reduxData.loggedIn,

@@ -35,7 +35,7 @@ function UpcomingEvents(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
-  console.log('UPCOMINGEVENTS: mapStateToProps', state)
+  // console.log('UPCOMINGEVENTS: mapStateToProps', state)
   return {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
