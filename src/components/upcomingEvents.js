@@ -2,12 +2,14 @@ import React from 'react';
 import './upcomingEvents.scss';
 import { connect } from 'react-redux';
 import getUpcomingEvents from '../lib/getUpcomingEvents';
+import { setCalendars, setEvents } from '../store/actions';
 
 class UpcomingEvents extends React.Component {
 
   componentDidMount() {
     getUpcomingEvents(this.props.calendars, this.props.config)
       .then(events => {
+        console.log('got upcoming events: ', { events });
         this.props.setEvents(events);
       })
   };
@@ -35,15 +37,13 @@ class UpcomingEvents extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     // dispatching plain actions
-    setCalendars: () => dispatch({ type: 'SETCALENDARS' }),
-    setMyQCalendar: () => dispatch({ type: 'SETMYQCALENDAR' }),
-    setConfig: () => dispatch({ type: 'SETCONFIG' }),
-    setEvents: () => dispatch({ type: 'SETEVENTS' })
+    setCalendars: (calendars) => dispatch(setCalendars(calendars)),
+    setEvents: (events) => dispatch(setEvents(events))
   }
 }
 
 const mapStateToProps = state => {
-  // console.log('UPCOMINGEVENTS: mapStateToProps', state)
+  console.log('UPCOMINGEVENTS: mapStateToProps', state)
   return {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
