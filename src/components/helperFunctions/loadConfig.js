@@ -14,7 +14,15 @@ async function loadConfig(calendars) {
   // if myQ calendar exists, run LoadEvents which gets all the enties in the calendar with that instance
   if (myQCalendar) {
 
-    var config = JSON.parse(myQCalendar.description);
+    var config;
+
+    // make sure that there isn't bad data in the config 
+    try {
+      config = JSON.parse(myQCalendar.description);
+    } catch (err) {
+      myQCalendar.description = '';
+      config = JSON.parse(myQCalendar.description);
+    }
 
     const badData = config.hiddenCalendars.length === 0;
     console.log('badData', badData)
