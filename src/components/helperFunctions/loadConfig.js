@@ -21,7 +21,7 @@ async function loadConfig(calendars) {
       config = JSON.parse(myQCalendar.description);
     } catch (err) {
       myQCalendar.description = {};
-      config = {};
+      config = { hiddenCalendars: [] };
     }
 
     const badData = config.hiddenCalendars.length === 0;
