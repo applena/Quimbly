@@ -2,18 +2,28 @@ import { React, useState } from 'react';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
 import updateCalendarList from '../lib/updateCalendarList';
+import getUpcomingEvents from '../lib/getUpcomingEvents';
 
 function Calendars(props) {
   console.log('in Calendars', props)
   const [hiddenCalendars, setHiddenCalendars] = useState(props.config.hiddenCalendars);
 
+  const updateCalendarsAndEvents = async (e) => {
+    console.log('updateCalAndEvents', e.target.id);
+    await updateCalendarList(e.target.id, props.setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props);
+    getUpcomingEvents(props.calendars, props.config)
+      .then(events => {
+        console.log('got upcoming events: ', { events });
+        props.setEvents(events);
+      })
+  }
   return (
     <div>
       {props.calendars && props.calendars.length &&
         <div>
           <h2>Calendars</h2>
 
-          <form onChange={(e) => updateCalendarList(e.target.id, props.setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props)}>
+          <form onChange={(e) => updateCalendarsAndEvents(e)}>
             {props.calendars.map((calendar, i) => {
 
               const calendarColorStyle = {
@@ -39,7 +49,7 @@ function Calendars(props) {
           </form>
         </div>
       }
-    </div>
+    </div >
   )
 }
 

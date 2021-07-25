@@ -9,6 +9,8 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
+import LogoutButton from './components/logoutButton';
+import LoginButton from './components/loginButton';
 
 let scriptAdded;
 
@@ -21,6 +23,7 @@ function App(props) {
 
   // Init the Google API client
   const initClient = useCallback(() => {
+    console.log('in initClient')
     window.gapi.client.init({
       discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
       clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
@@ -92,6 +95,7 @@ function App(props) {
     <Layout>
       {show &&
         <div>
+          <LogoutButton />
           <User />
           <Calendars
             setVisibleCalendars={setVisibleCalendars}
@@ -100,6 +104,7 @@ function App(props) {
           <AddEvent />
         </div>
       }
+      <LoginButton />
     </Layout>
   );
 };
