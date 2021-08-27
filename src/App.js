@@ -9,7 +9,6 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
-import LogoutButton from './components/logoutButton';
 import LoginButton from './components/loginButton';
 
 let scriptAdded;
@@ -23,7 +22,6 @@ function App(props) {
 
   // Init the Google API client
   const initClient = useCallback(() => {
-    console.log('in initClient')
     window.gapi.client.init({
       discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
       clientId: '666346298716-glkmqvi7n7djp4a69757cnvjhga7skkp.apps.googleusercontent.com',
@@ -32,19 +30,24 @@ function App(props) {
       const isLoggedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 
       const onLoggedIn = async () => {
-        // console.log('user is signed in');
+        console.log('user is signed in');
         props.isLoggedIn(true);
 
         // get all the calendars
         const response = await gapi.client.calendar.calendarList.list();
-        // console.log({ response })
+
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         // TODO: loading annimation
         let calendars = response.result.items;
-        const config = await loadConfig(calendars);
-        props.setConfig(config.config);
+        const { config, myQCalendar } = await loadConfig(calendars);
+        if (!calendars.find((calendar) => calendar.id === myQCalendar.id)) {
+          calendars.push(myQCalendar);
+        }
+
+        props.setConfig(config);
         props.setCalendars(calendars);
-        props.setMyQCalendar(config.myQCalendar);
+        props.setMyQCalendar(myQCalendar);
+        console.log('config!!!', { config, calendars, myQCalendar })
 
         setShow(true);
       }
@@ -52,7 +55,7 @@ function App(props) {
       // if the user is not logged in, log them into google and load their calendars with events
       if (!isLoggedIn) {
         // Listen for sign-in state changes.
-        // console.log('not logged in')
+        console.log('not logged in')
         gapi.auth2.getAuthInstance().isSignedIn.listen(onLoggedIn);
         return gapi.auth2.getAuthInstance().signIn();
       }
@@ -61,6 +64,7 @@ function App(props) {
       onLoggedIn();
 
     })
+      .catch(err => console.error('in catch for initClient', err))
   }, [props]);
 
   // Load the SDK asynchronously
@@ -95,7 +99,6 @@ function App(props) {
     <Layout>
       {show &&
         <div>
-          <LogoutButton />
           <User />
           <Calendars
             setVisibleCalendars={setVisibleCalendars}

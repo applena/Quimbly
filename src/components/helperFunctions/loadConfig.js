@@ -1,51 +1,40 @@
 import data from '../../store/data';
-import cleanUp from './cleanUp';
+import saveConfig from './saveConfig';
+import createConfig from './createConfig';
 
 /* global gapi */
 
 async function loadConfig(calendars) {
   // finding the MyQ calendar if it exists
-  let myQCalendar = calendars.filter(calendar => {
+  let myQCalendar = calendars.find(calendar => {
     return calendar.summary === 'MyQ';
-  })[0];
+  });
+
+  console.log('found myQCal in loadConfig', { myQCalendar })
 
   // console.log({myQCalendar})
 
-  // if myQ calendar exists, run LoadEvents which gets all the enties in the calendar with that instance
-  if (myQCalendar) {
+  if (!myQCalendar) {
 
-    var config;
-
-    // make sure that there isn't bad data in the config 
-    try {
-      config = JSON.parse(myQCalendar.description);
-    } catch (err) {
-      myQCalendar.description = {};
-      config = { hiddenCalendars: [] };
-    }
-
-    const badData = config.hiddenCalendars.length === 0;
-    console.log('badData', badData)
-    if (badData) {
-      calendars = await cleanUp(calendars);
-    } else {
-      // console.log('load config:', { config })
-      return { config, myQCalendar };
-    }
-
+    // if myQ calendar doesn't exist, create MyQ calendar
+    console.log('no myQ calendar - creating one')
+    myQCalendar = await createConfig();
   }
 
-  // if myQ calendar doesn't exist, create MyQ calendar
-  const response = await gapi.client.calendar.calendars.insert({
-    summary: 'MyQ',
-    description: JSON.stringify(data.config)
-  })
+  let config;
 
-  // create a calendar config event
+  try {
+    config = JSON.parse(myQCalendar.description);
+  } catch (err) {
+    console.error('ERROR', err);
+  }
 
-  myQCalendar = response.result;
+  if (!config) {
+    config = data.config;
+    await saveConfig(config, myQCalendar.id);
+  }
 
-  return { config: data.config, myQCalendar };
+  return { config, myQCalendar };
 
 }
 

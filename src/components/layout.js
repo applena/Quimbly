@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from './header';
+import Header from './header/header';
 import Footer from './footer';
 
 class Layout extends React.Component {
-  render(){
-    return(
+  render() {
+    return (
       <>
         <Header />
         <main>

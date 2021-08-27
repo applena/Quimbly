@@ -14,7 +14,7 @@ const reducer = (state = reduxData, action) => {
     //   return { DailyTasks: payload };
 
     case 'SETCONFIG':
-      // console.log('SETCONFIG:', payload)
+      console.log('SETCONFIG:', payload)
       return { ...state, config: payload };
 
     case 'SETCALENDARS':
@@ -26,7 +26,7 @@ const reducer = (state = reduxData, action) => {
       return { ...state, events: payload }
 
     case 'SETMYQCALENDAR':
-      // console.log('SETMYQCALENDAR:', payload)
+      console.log('SETMYQCALENDAR:', payload)
       return { ...state, myQCalendar: payload };
 
     case 'TOGGLEHIDECALENDAR':
@@ -42,7 +42,7 @@ const reducer = (state = reduxData, action) => {
       return { ...state, config: { hiddenCalendars } };
 
     case 'SETUSER':
-      // console.log('setting the user', payload);
+      console.log('setting the user', payload);
       state.User = payload;
       return state;
 

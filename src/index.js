@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 
+import './reset.scss';
+import './global.scss';
+
 import createStore from './store/index.js';
 const store = createStore();
 

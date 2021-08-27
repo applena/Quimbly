@@ -1,8 +1,8 @@
 import saveConfig from '../components/helperFunctions/saveConfig';
 import getUpcomingEvents from './getUpcomingEvents';
 
-const updateCalendarList = (calendarId, setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props) => {
-  console.log('update calendar list:', { calendarId })
+const updateCalendarList = (calendarId, setVisibleCalendars, setHiddenCalendars, hiddenCalendars, props, myQCalendar) => {
+  console.log('update calendar list:', { calendarId }, { myQCalendar })
   let chosenCalendar = calendarId;
   let newHiddenCalendars = [];
 
@@ -21,7 +21,7 @@ const updateCalendarList = (calendarId, setVisibleCalendars, setHiddenCalendars,
   console.log({ newVisibleCalendars, hiddenCalendars });
 
   // save it to the config
-  saveConfig({ hiddenCalendars: newHiddenCalendars }, props.myQCalendar.id);
+  saveConfig({ hiddenCalendars: newHiddenCalendars }, myQCalendar.id);
 
   // update state
   setHiddenCalendars(newHiddenCalendars);
