@@ -18,28 +18,28 @@ const reducer = (state = reduxData, action) => {
       return { ...state, config: payload };
 
     case 'SETCALENDARS':
-      // console.log('SETCALENDARS:', payload)
+      console.log('SETCALENDARS:', payload)
       return { ...state, calendars: payload };
 
     case 'SETEVENTS':
-      console.log('reducer: SETEVENTS', payload)
+      // console.log('reducer: SETEVENTS', payload)
       return { ...state, events: payload }
 
     case 'SETMYQCALENDAR':
       console.log('SETMYQCALENDAR:', payload)
       return { ...state, myQCalendar: payload };
 
-    case 'TOGGLEHIDECALENDAR':
-      // if the payload is in the hiddenCalendars, remove it - otherwise add it
-      // the payload is the id of the hidden calendar
-      let hiddenCalendars = state.config.hiddenCalendars;
-      if (hiddenCalendars.includes(payload)) {
-        hiddenCalendars = hiddenCalendars.filter(calendar => calendar !== payload);
-      } else {
-        hiddenCalendars.push(payload);
-      }
-      console.log('redux:', hiddenCalendars)
-      return { ...state, config: { hiddenCalendars } };
+    // case 'TOGGLEHIDECALENDAR':
+    //   // if the payload is in the hiddenCalendars, remove it - otherwise add it
+    //   // the payload is the id of the hidden calendar
+    //   let hiddenCalendars = state.config.hiddenCalendars;
+    //   if (hiddenCalendars.includes(payload)) {
+    //     hiddenCalendars = hiddenCalendars.filter(calendar => calendar !== payload);
+    //   } else {
+    //     hiddenCalendars.push(payload);
+    //   }
+    //   console.log('redux:', hiddenCalendars)
+    //   return { ...state, config: { hiddenCalendars } };
 
     case 'SETUSER':
       console.log('setting the user', payload);

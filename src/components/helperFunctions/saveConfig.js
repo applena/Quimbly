@@ -7,7 +7,7 @@ const saveConfig = async (config, id) => {
     description: JSON.stringify(config),
     calendarId: id
   });
-  console.log('save config', { res })
+  // console.log('save config', { res })
 }
 
 export default saveConfig;

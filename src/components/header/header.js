@@ -7,7 +7,7 @@ const Header = () => {
     <div id="header">
       <div className="flex">
         <div>
-          <h1>My-Q</h1>
+          <h1>Quimbly</h1>
           <p>Organize your life one task at a time</p>
         </div>
         <LogoutButton />
