@@ -2,9 +2,11 @@
   padding-left: 0;
 
   li{
-    border-top: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
     margin: 1em 0;
+    padding: 1em;
+    width: 70%;
   }
 }

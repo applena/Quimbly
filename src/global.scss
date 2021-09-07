@@ -1,3 +1,12 @@
 *{
   margin: 1em;
 }
+
+form{
+  .MuiFormControl-root{
+    display:block;
+  }
+  .MuiButton-outlinedPrimary{
+    margin: 1em;
+  }
+}
