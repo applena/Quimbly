@@ -2,8 +2,6 @@ import data from '../../store/data';
 import saveConfig from './saveConfig';
 import createConfig from './createConfig';
 
-/* global gapi */
-
 async function loadConfig(calendars) {
   // finding the MyQ calendar if it exists
   let myQCalendar = calendars.find(calendar => {

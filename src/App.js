@@ -3,13 +3,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Layout from './components/layout';
 import Calendars from './components/calendars';
-import User from './components/user';
+// import User from './components/user';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from './store/actions';
 import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
-import LoginButton from './components/loginButton';
 
 let scriptAdded;
 
@@ -99,7 +98,7 @@ function App(props) {
     <Layout>
       {show &&
         <div>
-          <User />
+          {/* <User /> */}
           <Calendars
             setVisibleCalendars={setVisibleCalendars}
           />
@@ -107,7 +106,6 @@ function App(props) {
           <AddEvent />
         </div>
       }
-      <LoginButton />
     </Layout>
   );
 };

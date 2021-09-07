@@ -3,6 +3,8 @@
 import { connect } from 'react-redux';
 import { isLoggedIn } from '../store/actions';
 
+import Button from '@material-ui/core/Button';
+
 function LogoutButton(props) {
   const signOut = () => {
     gapi.auth2.getAuthInstance().disconnect();
@@ -10,7 +12,7 @@ function LogoutButton(props) {
   }
 
   return (
-    <button onClick={signOut}>Log Out</button>
+    <Button variant="outlined" onClick={signOut}>Log Out</Button>
   )
 }
 

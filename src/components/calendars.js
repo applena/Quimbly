@@ -25,10 +25,7 @@ const MenuProps = {
 
 function Calendars(props) {
 
-  const [selectedCalendars, setSelectedCalendars] = useState(props.calendars.filter(c => !props.config.hiddenCalendars.includes(c)));
-
-  console.log('in Calendars', props, selectedCalendars);
-
+  const [selectedCalendars, setSelectedCalendars] = useState(props.calendars.filter(c => !props.config.hiddenCalendars.includes(c)).map(c => c.id));
 
   const toggleCalendar = async (e) => {
     setSelectedCalendars([...selectedCalendars, e.target.value]);
@@ -39,7 +36,7 @@ function Calendars(props) {
 
     let newHiddenCalendars = [];
 
-    console.log('props.config.hiddenCalendar', props.config.hiddenCalendars, { chosenCalendar })
+
     // put the calendar in the correct place and save it to newHiddenCalendars
     if (props.config.hiddenCalendars.includes(chosenCalendar)) {
       newHiddenCalendars = props.config.hiddenCalendars.filter(c => c !== chosenCalendar);
@@ -49,15 +46,13 @@ function Calendars(props) {
       console.log('adding', { newHiddenCalendars })
     }
 
-    console.log({ newHiddenCalendars });
-
     const config = { hiddenCalendars: newHiddenCalendars.filter(i => i) };
 
     props.setConfig(config);
     // save it to the config
     saveConfig(config, props.myQCalendar.id);
 
-    getUpcomingEvents(props.calendars, props.config)
+    getUpcomingEvents(props.calendars, config)
       .then(events => {
         props.setEvents(events);
       })
@@ -90,85 +85,6 @@ function Calendars(props) {
         </FormControl>
 
       </div>
-
-      {/* {props.calendars && props.calendars.length &&
-        <div>
-          <h2>Calendars</h2>
-
-          <FormControl>
-            <InputLabel>Select Calendars</InputLabel>
-            <Select
-              labelId="calendars"
-              multiple
-              value={props.calendars.map(c => c.summary)}
-              onChange={(e) => toggleCalendar(e)}
-              input={<Input />}
-              MenuProps={MenuProps}
-            >
-              {props.calendars.map((calendar, i) => {
-
-                const calendarColorStyle = {
-                  backgroundColor: calendar.backgroundColor,
-                  borderRadius: '4px',
-                  padding: '1em'
-                };
-
-                <MenuItem key={i} value={calendar.id} id={calendar.id} style={calendarColorStyle}>
-                  {calendar.summary}
-                </MenuItem>
-              })}
-            </Select>
-          </FormControl> */}
-
-      {/* <form onChange={(e) => updateCalendarsAndEvents(e)}>
-            <h2>Select Calendars to Include</h2>
-
-            <select>
-              {props.calendars.map((calendar, i) => {
-
-                const calendarColorStyle = {
-                  backgroundColor: calendar.backgroundColor,
-                  borderRadius: '4px',
-                  padding: '1em'
-                };
-
-                return (
-                  <option key={i} style={calendarColorStyle}>
-                    <input type="checkbox" defaultChecked={props.config.hiddenCalendars.includes(calendar.id) ? false : true} />
-                    {calendar.summary}
-                  </option>
-                )
-              }
-              )}
-            </select>
-          </form> */}
-
-      {/* <form onChange={(e) => updateCalendarsAndEvents(e)}>
-            {props.calendars.map((calendar, i) => {
-
-              const calendarColorStyle = {
-                backgroundColor: calendar.backgroundColor,
-                width: '12px',
-                height: '12px',
-                display: 'inline-block',
-                borderRadius: '4px'
-              };
-
-              const inputName = calendar.summary;
-
-
-              return (<div key={i}>
-                <span className="box" style={calendarColorStyle}></span>
-                <label>
-                  <input type="checkbox" id={calendar.id} name={inputName} value={inputName} defaultChecked={props.config.hiddenCalendars.includes(calendar.id) ? false : true} />{calendar.summary}
-                </label>
-              </div>
-              )
-            }
-            )}
-          </form> */}
-      {/* </div> */}
-      {/* } */}
     </div >
   )
 }
