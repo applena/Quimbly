@@ -1,9 +1,6 @@
 /* global gapi */
 
 import React, { useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Modal from 'react-bootstrap/Modal';
-// import Form from 'react-bootstrap/Form';
 import "react-datepicker/dist/react-datepicker.css";
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar } from '../store/actions';
@@ -16,10 +13,13 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+
 
 import './addEvent.scss';
 
@@ -40,14 +40,21 @@ function AddEvent(props) {
   const [eventStartTime, setEventStartTime] = useState(now);
   const [eventEndTime, setEventEndTime] = useState(oneHour);
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
+  const [recurringFrequency, setRecurringFrequency] = useState('ONCE');
+  const [recurringEndDate, setRecurringEndDate] = useState(today)
 
-  // const [recurringValue, setRecurringValue] = useState(false);
-
-  console.log({ attendeeEmail })
+  // console.log({ attendeeEmail })
 
   const startDateTime = moment(`${eventDate} ${eventStartTime}`, 'YYYY-MM-DD HH:mm').format();
   const endDateTime = moment(`${eventDate} ${eventEndTime}`, 'YYYY-MM-DD HH:mm').format();
   const handleClose = () => setShow(false);
+  const handleEndDate = (e) => {
+    const formattedDate = new Date(e.target.value).toISOString().replace(/[-:\.]/g, '');
+    const formattedDateStart = formattedDate.substring(0, formattedDate.length - 4);
+    const newformattedDate = `${formattedDateStart}Z`;
+    console.log({ newformattedDate, formattedDateStart });
+    setRecurringEndDate(newformattedDate);
+  }
 
   const saveEvent = () => {
 
@@ -63,9 +70,12 @@ function AddEvent(props) {
         'dateTime': endDateTime,//'2015-05-28T17:00:00-07:00', TODO - add an hour
         'timeZone': props.myQCalendar.timeZone
       },
-      // 'recurrence': [
-      //   'RRULE:FREQ=DAILY;COUNT=2'
-      // ],
+      'recurrence': [
+        `RRULE:FREQ=${recurringFrequency};UNTIL=${recurringEndDate}`
+        // "RRULE:FREQ=WEEKLY;UNTIL=20210917T0000000Z"
+        // "RRULE:FREQ=WEEKLY;UNTIL=20110701T170000Z",
+
+      ],
       'attendees': attendeeEmail,
       // 'reminders': {
       //   'useDefault': false,
@@ -135,6 +145,27 @@ function AddEvent(props) {
                   />
                 </FormGroup>
               </FormControl>
+              {displayRecurringEvent &&
+                <FormControl>
+                  <InputLabel>Repeats</InputLabel>
+                  <Select
+                    // value={age}
+                    onChange={(e) => setRecurringFrequency(e.target.value)}
+                  >
+                    <MenuItem value="DAILY">Daily</MenuItem>
+                    <MenuItem value="WEEKLY">Weekly</MenuItem>
+                    <MenuItem value="MONTHLY">Monthly</MenuItem>
+                    <MenuItem value="YEARLY">Yearly</MenuItem>
+                  </Select>
+
+                  <TextField
+                    onChange={handleEndDate}
+                    type="date"
+                    defaultValue={today}
+                    id="recurring-event-date"
+                    label="End Date" />
+                </FormControl>
+              }
               <Button onClick={() => setShow(false)} variant="outlined" color="secondary">Close</Button>
               <Button onClick={saveEvent} variant="outlined" color="primary">Save changes</Button>
             </form>
@@ -142,40 +173,6 @@ function AddEvent(props) {
         </Card>
       </Modal>
     </div>
-
-
-
-    // <Form.Group controlId="formRecurringEvent">
-    //   <Form.Check onClick={() => setDisplayRecurringEvent(!displayRecurringEvent)} type="checkbox" label="Recurring Event" />
-    // </Form.Group>
-
-    // {displayRecurringEvent &&
-    //   <Form.Group controlId="formRecurringEventDetails">
-    //     <Form.Control as="select">
-    //       <option>Daily</option>
-    //       <option>Weekly</option>
-    //       <option>Monthly</option>
-    //       <option>Yearly</option>
-    //     </Form.Control>
-
-    //     <Form.Label>Ends On</Form.Label> */}
-    /* <DateTimePicker
-                  onChange={setRecurringValue}
-                  value={recurringValue}
-                  disableClock={true}
-  //               /> */
-    // </Form.Group>
-    //           }
-    //         </Form>
-    //       </Modal.Body>
-
-    //       <Modal.Footer>
-    //         <Button onClick={() => setShow(false)} variant="outlined" color="secondary">Close</Button>
-    //         <Button onClick={saveEvent} variant="outlined" color="primary">Save changes</Button>
-    //       </Modal.Footer>
-    //     </Modal.Dialog>
-    //   </Modal> 
-    //</div>
   )
 }
 
