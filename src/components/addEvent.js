@@ -30,6 +30,7 @@ function AddEvent(props) {
   const today = new Date().toISOString().split('T')[0];
   const now = new Date().toISOString().split('T')[1].substring(0, 5);
   const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toISOString().split('T')[1].substring(0, 5);
+  let event = {};
 
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
@@ -40,14 +41,18 @@ function AddEvent(props) {
   const [eventStartTime, setEventStartTime] = useState(now);
   const [eventEndTime, setEventEndTime] = useState(oneHour);
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
-  const [recurringFrequency, setRecurringFrequency] = useState('ONCE');
+  const [recurringFrequency, setRecurringFrequency] = useState(false);
   const [recurringEndDate, setRecurringEndDate] = useState(today)
 
   // console.log({ attendeeEmail })
 
   const startDateTime = moment(`${eventDate} ${eventStartTime}`, 'YYYY-MM-DD HH:mm').format();
   const endDateTime = moment(`${eventDate} ${eventEndTime}`, 'YYYY-MM-DD HH:mm').format();
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setDisplayRecurringEvent(false);
+    setRecurringFrequency(false);
+  }
   const handleEndDate = (e) => {
     const formattedDate = new Date(e.target.value).toISOString().replace(/[-:\.]/g, '');
     const formattedDateStart = formattedDate.substring(0, formattedDate.length - 4);
@@ -58,7 +63,8 @@ function AddEvent(props) {
 
   const saveEvent = () => {
 
-    const event = {
+    event = {
+      ...event,
       'summary': eventName,
       'location': location,
       'description': description,
@@ -70,12 +76,6 @@ function AddEvent(props) {
         'dateTime': endDateTime,//'2015-05-28T17:00:00-07:00', TODO - add an hour
         'timeZone': props.myQCalendar.timeZone
       },
-      'recurrence': [
-        `RRULE:FREQ=${recurringFrequency};UNTIL=${recurringEndDate}`
-        // "RRULE:FREQ=WEEKLY;UNTIL=20210917T0000000Z"
-        // "RRULE:FREQ=WEEKLY;UNTIL=20110701T170000Z",
-
-      ],
       'attendees': attendeeEmail,
       // 'reminders': {
       //   'useDefault': false,
@@ -85,6 +85,12 @@ function AddEvent(props) {
       //   ]
       // }
     };
+
+    if (recurringFrequency) {
+      event.recurrence = [
+        `RRULE:FREQ=${recurringFrequency};UNTIL=${recurringEndDate}`
+      ]
+    }
 
     console.log({ event })
 
