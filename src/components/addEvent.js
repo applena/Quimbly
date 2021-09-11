@@ -20,16 +20,14 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
 import './addEvent.scss';
-
 
 function AddEvent(props) {
   //console.log('addEvent', { props });
 
   const today = new Date().toISOString().split('T')[0];
-  const now = new Date().toISOString().split('T')[1].substring(0, 5);
-  const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toISOString().split('T')[1].substring(0, 5);
+  const now = new Date().toLocaleTimeString().substring(0, 5);
+  const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toLocaleTimeString().substring(0, 5);
   let event = {};
 
   const [attendeeEmail, setAttendeeEmail] = useState([])
@@ -52,6 +50,7 @@ function AddEvent(props) {
     setShow(false);
     setDisplayRecurringEvent(false);
     setRecurringFrequency(false);
+    setAttendeeEmail([]);
   }
   const handleEndDate = (e) => {
     const formattedDate = new Date(e.target.value).toISOString().replace(/[-:\.]/g, '');
@@ -92,7 +91,7 @@ function AddEvent(props) {
       ]
     }
 
-    console.log({ event })
+    // console.log({ event })
 
     const request = gapi.client.calendar.events.insert({
       'calendarId': props.myQCalendar.id,

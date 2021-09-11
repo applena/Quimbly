@@ -26,7 +26,7 @@ const reducer = (state = reduxData, action) => {
       return { ...state, events: payload }
 
     case 'SETMYQCALENDAR':
-      console.log('SETMYQCALENDAR:', payload)
+      // console.log('SETMYQCALENDAR:', payload)
       return { ...state, myQCalendar: payload };
 
     // case 'TOGGLEHIDECALENDAR':
