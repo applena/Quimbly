@@ -6,6 +6,7 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 function DailyOutline(props) {
   console.log('dailyOutline', props.events);
   let hourToRender = new Date().getHours() - 1;
+  const [date, setDate] = useState(new Date().getDate());
 
   const divStyle = {
     display: 'block',
@@ -28,59 +29,25 @@ function DailyOutline(props) {
 
   return (
     <>
-      <div style={dateStyle} id="date">{new Date().getDate()}</div>
+      <div style={dateStyle} id="date">{date}</div>
       <div id='calendar-outline'>
-        {new Array(26).fill(1).map((value, i) => (
-          <div style={divStyle} className='15-min'>{hourToRender + i > 24 ? `${hourToRender + i - 24}am` : hourToRender + i > 12 ? `${hourToRender + i - 12}pm` : `${hourToRender + i}am`}</div>
-        ))
+        {new Array(26).fill(1).map((value, i) => {
+          const hourBlock = new Date();
+          hourBlock.setHours(hourToRender + i)
+          hourBlock.setMinutes(0);
+          hourBlock.setSeconds(0);
+          const ampm = `${hourBlock.toLocaleString().split(' ')[2]}`;
+          const hour = `${hourBlock.toLocaleString().split(' ')[1].split(':')[0]}`;
+          const min = `${hourBlock.toLocaleString().split(' ')[1].split(':')[1]}`;
+          const time = `${hour}:${min}${ampm}`;
+          const date = new Date(hourBlock.toLocaleString()).getDate();
+
+          return (
+            <div key={i} style={divStyle} className='15-min'>{time}</div>
+          )
+        })
 
         }
-        {/* 
-        <div style={divStyle} className='15-min 1am'>1:00am</div>
-
-        <div style={divStyle} className='15-min 2am'>2:00am</div>
-
-        <div style={divStyle} className='15-min 3am'>3:00am</div>
-
-        <div style={divStyle} className='15-min 4am'>4:00am</div>
-
-        <div style={divStyle} className='15-min 5am'>5:00am</div>
-
-        <div style={divStyle} className='15-min 6am'>6:00am</div>
-
-        <div style={divStyle} className='15-min 7am'>7:00am</div>
-
-        <div style={divStyle} className='15-min 8am'>8:00am</div>
-
-        <div style={divStyle} className='15-min 9am'>9:00am</div>
-
-        <div style={divStyle} className='15-min 10am'>10:00am</div>
-
-        <div style={divStyle} className='15-min 11am'>11:00am</div>
-
-        <div style={divStyle} className='15-min 12pm'>12:00pm</div>
-
-        <div style={divStyle} className='15-min 1pm'>1:00pm</div>
-
-        <div style={divStyle} className='15-min 2pm'>2:00pm</div>
-
-        <div style={divStyle} className='15-min 3pm'>3:00pm</div>
-
-        <div style={divStyle} className='15-min 4pm'>4:00pm</div>
-
-        <div style={divStyle} className='15-min 5pm'>5:00pm</div>
-
-        <div style={divStyle} className='15-min 6pm'>6:00pm</div>
-
-        <div style={divStyle} className='15-min 7pm'>7:00pm</div>
-
-        <div style={divStyle} className='15-min 8pm'>8:00pm</div>
-
-        <div style={divStyle} className='15-min 9pm'>9:00pm</div>
-
-        <div style={divStyle} className='15-min 10pm'>10:00pm</div>
-
-        <div style={divStyle} className='15-min 11pm'>11:00pm</div> */}
 
       </div>
     </>
