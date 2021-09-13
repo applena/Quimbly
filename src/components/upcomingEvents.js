@@ -5,14 +5,13 @@ import getUpcomingEvents from '../lib/getUpcomingEvents';
 import { setCalendars, setEvents } from '../store/actions';
 
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
 
 function TabPanel(props) {
   const { value, index, events, ...other } = props;
-  console.log({ events })
 
   return (
     <div
@@ -79,13 +78,13 @@ class UpcomingEvents extends React.Component {
     return (
       <>
         <div id="events-tabs">
-          <AppBar position="static">
+          <Paper square>
             <Tabs value={this.state.value} onChange={this.handleChange}>
               <Tab label="All Events" {...a11yProps(0)} />
               <Tab label="Today's Events" {...a11yProps(1)} />
               <Tab label="This Week's Events" {...a11yProps(2)} />
             </Tabs>
-          </AppBar>
+          </Paper>
           <TabPanel value={this.state.value} events={this.props.events} index={0}>
 
           </TabPanel>

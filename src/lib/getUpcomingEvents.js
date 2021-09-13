@@ -32,6 +32,7 @@ const getUpcomingEvents = async (calendars, config) => {
     return a.startTime > b.startTime ? 1 : -1;
   }).slice(0, 10);
 
+
   return allEvents;
 }
 

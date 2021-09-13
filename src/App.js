@@ -9,6 +9,7 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
+import DailyOutline from './components/dailyOutline/dailyOutline';
 
 let scriptAdded;
 
@@ -102,7 +103,8 @@ function App(props) {
           <Calendars
             setVisibleCalendars={setVisibleCalendars}
           />
-          <UpcomingEvents />
+          {/* <UpcomingEvents /> */}
+          <DailyOutline />
           <AddEvent />
         </div>
       }
