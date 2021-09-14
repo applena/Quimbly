@@ -106,7 +106,7 @@ function AddEvent(props) {
   }
 
   return (
-    <div id="addEvent">
+    <div id="add-event">
       <Button variant="outlined" onClick={() => setShow(true)}>Add Event To Quimbly</Button>
 
       <Modal

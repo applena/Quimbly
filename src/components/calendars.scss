@@ -1,9 +1,12 @@
 #calendars{
+  position:absolute;
+  top:0;
+
   formConrol{
     min-width: 300px;
   }
   .MuiFormControl-root{
-    display:inherit;
+    // display:inherit;
 
     label{
       font-size: 2em;
@@ -11,6 +14,6 @@
   }
   .MuiInputBase-root{
     display:inherit;
-    width: 70%;
+    width: 50%;
   }
 }

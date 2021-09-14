@@ -1,13 +1,18 @@
 #header{
-  .flex{
-    display: flex;
-    justify-content: space-between;
-  }
+  position: fixed;
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
 
   #logo-container{
     margin: 1em;
     #logo{
       width: 300px;
     }
+  }
+
+  #cal-icon{
+    position:absolute;
   }
 }

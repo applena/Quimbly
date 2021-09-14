@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../../store/actions';
+import './dailyOutline.scss';
 /* global gapi */
 
 function DailyOutline(props) {
@@ -24,12 +25,25 @@ function DailyOutline(props) {
     width: '25px',
     height: '25px',
     textAlign: 'center',
-    lineHeight: '25px'
+    lineHeight: '25px',
+    position: 'fixed'
+  }
+
+  const dateContainer = {
+    backgroundColor: 'white',
+    position: 'fixed',
+    top: '130px',
+    borderBottom: '2px solid black',
+    width: '100%',
+    height: '39px',
+    zIndex: '2'
   }
 
   return (
     <>
-      <div style={dateStyle} id="date">{date}</div>
+      <div style={dateContainer}>
+        <div style={dateStyle} id="date">{date}</div>
+      </div>
       <div id='calendar-outline'>
         {new Array(26).fill(1).map((value, i) => {
           const hourBlock = new Date();
@@ -43,7 +57,7 @@ function DailyOutline(props) {
           const date = new Date(hourBlock.toLocaleString()).getDate();
 
           return (
-            <div key={i} style={divStyle} className='15-min'>{time}</div>
+            <div key={i} style={divStyle} className='fifteen-min'>{time}</div>
           )
         })
 

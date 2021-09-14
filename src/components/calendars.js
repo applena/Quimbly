@@ -62,12 +62,11 @@ function Calendars(props) {
     <div id="calendars">
       <div>
         <FormControl>
-          <InputLabel>Select Calendars</InputLabel>
           <Select
             multiple
             value={selectedCalendars}
             input={<Input />}
-            MenuProps={MenuProps}
+          // MenuProps={MenuProps}
           >
             {props.calendars.map((calendar, i) => (
 

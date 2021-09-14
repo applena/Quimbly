@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import Layout from './components/layout';
-import Calendars from './components/calendars';
 // import User from './components/user';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from './store/actions';
@@ -16,9 +15,8 @@ let scriptAdded;
 
 function App(props) {
   const [show, setShow] = useState(false);
-  const [visibleCalendars, setVisibleCalendars] = useState([]);
 
-  console.log('APP', { props, visibleCalendars });
+  console.log('APP', { props });
 
   // Init the Google API client
   const initClient = useCallback(() => {
@@ -100,9 +98,6 @@ function App(props) {
       {show &&
         <div>
           {/* <User /> */}
-          <Calendars
-            setVisibleCalendars={setVisibleCalendars}
-          />
           {/* <UpcomingEvents /> */}
           <DailyOutline />
           <AddEvent />

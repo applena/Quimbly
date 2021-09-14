@@ -2,15 +2,18 @@ import React from 'react';
 import LogoutButton from '../logoutButton';
 import './header.scss';
 import quimbly from '../../assets/quimbly.png';
+import Calendars from '../calendars';
 
 const Header = () => {
   return (
     <div id="header">
-      <div className="flex">
+      <div>
+        <div id="cal-icon"> 📆 </div>
+        <Calendars />
         <div id="logo-container">
           <img id="logo" src={quimbly} alt="quimbly logo" />
         </div>
-        <LogoutButton />
+        {/* <LogoutButton /> */}
       </div>
     </div>
   )
