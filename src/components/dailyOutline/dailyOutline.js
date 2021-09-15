@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../../store/actions';
+import NowLine from '../nowLine';
 import './dailyOutline.scss';
 /* global gapi */
 
@@ -8,12 +9,18 @@ function DailyOutline(props) {
   console.log('dailyOutline', props.events);
   let hourToRender = new Date().getHours() - 1;
   const [date, setDate] = useState(new Date().getDate());
+  const [minutes, setCurrentMinutes] = useState(0);
+  const [nowLineLocation, setNowLineLocation] = useState('130px')
+
+  useEffect(() => {
+    setNowLineLocation(165 + 60 + minutes);
+  }, [minutes])
 
   const divStyle = {
     display: 'block',
     fontSize: '.8em',
     paddingTop: '5px',
-    height: '50px',
+    height: '60px',
     textAlign: 'right',
     borderBottom: '1px dotted black'
   };
@@ -64,6 +71,10 @@ function DailyOutline(props) {
         }
 
       </div>
+      <NowLine
+        setCurrentMinutes={setCurrentMinutes}
+        nowLineLocation={nowLineLocation}
+      />
     </>
   )
 }
