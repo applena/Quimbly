@@ -14,15 +14,15 @@ const reducer = (state = reduxData, action) => {
     //   return { DailyTasks: payload };
 
     case 'SETCONFIG':
-      console.log('SETCONFIG:', payload)
+      // console.log('SETCONFIG:', payload)
       return { ...state, config: payload };
 
     case 'SETCALENDARS':
-      console.log('SETCALENDARS:', payload)
+      // console.log('SETCALENDARS:', payload)
       return { ...state, calendars: payload };
 
     case 'SETEVENTS':
-      // console.log('reducer: SETEVENTS', payload)
+      console.log('reducer: SETEVENTS', payload)
       return { ...state, events: payload }
 
     case 'SETMYQCALENDAR':

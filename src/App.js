@@ -5,7 +5,6 @@ import Layout from './components/layout';
 // import User from './components/user';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from './store/actions';
-import UpcomingEvents from './components/upcomingEvents';
 import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
 import DailyOutline from './components/dailyOutline/dailyOutline';

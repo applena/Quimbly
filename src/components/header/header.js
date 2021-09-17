@@ -1,5 +1,4 @@
 import React from 'react';
-import LogoutButton from '../logoutButton';
 import './header.scss';
 import quimbly from '../../assets/quimbly.png';
 import Calendars from '../calendars';

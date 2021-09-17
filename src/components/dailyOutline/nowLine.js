@@ -12,7 +12,6 @@ function NowLine(props) {
   setInterval(() => {
     const currentTime = new Date();
     const minutes = currentTime.getMinutes();
-    console.log('nowLine', { minutes })
     props.setCurrentMinutes(minutes);
   }, 10000);
 

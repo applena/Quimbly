@@ -1,20 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../../store/actions';
-import NowLine from '../nowLine';
+import NowLine from './nowLine';
+import getUpcomingEvents from '../../lib/getUpcomingEvents';
+
 import './dailyOutline.scss';
 /* global gapi */
 
 function DailyOutline(props) {
-  console.log('dailyOutline', props.events);
+  // console.log('dailyOutline', props.events); 
   let hourToRender = new Date().getHours() - 1;
-  const [date, setDate] = useState(new Date().getDate());
   const [minutes, setCurrentMinutes] = useState(0);
-  const [nowLineLocation, setNowLineLocation] = useState('130px')
+  const [nowLineLocation, setNowLineLocation] = useState('130px');
+  const [events, setEvents] = useState(props.events);
+
+  useEffect(() => {
+    getUpcomingEvents(props.calendars, props.config)
+      .then(events => {
+        console.log({ events })
+        props.setEvents(events);
+        setEvents(events);
+        generateEventLocations(events);
+      })
+
+  }, [])
+
+  const generateEventLocations = (events) => {
+    const nowHour = new Date().getHours();
+    const today = new Date().toLocaleString();
+
+    // get today's events
+    const todaysEvents = events.filter(event => {
+      const eventDate = new Date(event.startTime).toLocaleDateString();
+      return eventDate === today;
+    });
+
+    console.log({ todaysEvents })
+
+
+    // find the starting position for each event
+    todaysEvents.map(event => {
+      const startingHour = new Date(event.StartTime).getHours();
+      const startingMinute = new Date(event.StartTime).getMinutes();
+      const startingPixels = 130 + (60 * startingHour) + startingMinute;
+      console.log({ startingPixels })
+    })
+  };
 
   useEffect(() => {
     setNowLineLocation(165 + 60 + minutes);
-  }, [minutes])
+  }, [minutes]);
+
+
 
   const divStyle = {
     display: 'block',
@@ -49,7 +86,7 @@ function DailyOutline(props) {
   return (
     <>
       <div style={dateContainer}>
-        <div style={dateStyle} id="date">{date}</div>
+        <div style={dateStyle} id="date">{new Date().getDate()}</div>
       </div>
       <div id='calendar-outline'>
         {new Array(26).fill(1).map((value, i) => {
@@ -61,7 +98,6 @@ function DailyOutline(props) {
           const hour = `${hourBlock.toLocaleString().split(' ')[1].split(':')[0]}`;
           const min = `${hourBlock.toLocaleString().split(' ')[1].split(':')[1]}`;
           const time = `${hour}:${min}${ampm}`;
-          const date = new Date(hourBlock.toLocaleString()).getDate();
 
           return (
             <div key={i} style={divStyle} className='fifteen-min'>{time}</div>
