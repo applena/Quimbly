@@ -22,7 +22,7 @@ const reducer = (state = reduxData, action) => {
       return { ...state, calendars: payload };
 
     case 'SETEVENTS':
-      console.log('reducer: SETEVENTS', payload)
+      // console.log('reducer: SETEVENTS', payload)
       return { ...state, events: payload }
 
     case 'SETMYQCALENDAR':
@@ -42,7 +42,7 @@ const reducer = (state = reduxData, action) => {
     //   return { ...state, config: { hiddenCalendars } };
 
     case 'SETUSER':
-      console.log('setting the user', payload);
+      // console.log('setting the user', payload);
       state.User = payload;
       return state;
 

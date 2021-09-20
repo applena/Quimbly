@@ -39,14 +39,14 @@ export const setConfig = payload => {
 
 export const toggleHideCalendar = payload => {
   // console.log('in actions with', payload)
-  return{
+  return {
     type: 'TOGGLEHIDECALENDAR',
     payload,
   };
 }
 
 export const setUser = payload => {
-  console.log('in actions with', payload)
+  // console.log('in actions with', payload)
   return {
     type: 'SETUSER',
     payload,
@@ -54,7 +54,7 @@ export const setUser = payload => {
 };
 
 export const setEvents = payload => {
-  console.log('in setEvents actions with', payload)
+  // console.log('in setEvents actions with', payload)
   return {
     type: 'SETEVENTS',
     payload,

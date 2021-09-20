@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../../store/actions';
 import NowLine from './nowLine';
 import getUpcomingEvents from '../../lib/getUpcomingEvents';
+import EventLocations from './events/eventLocations';
 
 import './dailyOutline.scss';
 /* global gapi */
@@ -12,22 +13,20 @@ function DailyOutline(props) {
   let hourToRender = new Date().getHours() - 1;
   const [minutes, setCurrentMinutes] = useState(0);
   const [nowLineLocation, setNowLineLocation] = useState('130px');
-  const [events, setEvents] = useState(props.events);
+  const [eventLocations, setEventLocations] = useState([]);
 
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
-        console.log({ events })
-        props.setEvents(events);
-        setEvents(events);
+        // console.log({ events })
+        props.setEvents(events);;
         generateEventLocations(events);
       })
 
   }, [])
 
   const generateEventLocations = (events) => {
-    const nowHour = new Date().getHours();
-    const today = new Date().toLocaleString();
+    const today = new Date().toLocaleString().split(',')[0];
 
     // get today's events
     const todaysEvents = events.filter(event => {
@@ -35,16 +34,27 @@ function DailyOutline(props) {
       return eventDate === today;
     });
 
-    console.log({ todaysEvents })
-
-
-    // find the starting position for each event
-    todaysEvents.map(event => {
-      const startingHour = new Date(event.StartTime).getHours();
-      const startingMinute = new Date(event.StartTime).getMinutes();
-      const startingPixels = 130 + (60 * startingHour) + startingMinute;
-      console.log({ startingPixels })
+    // find the starting and ending position for each event
+    const eventLocations = todaysEvents.map(event => {
+      const startingHour = new Date(event.startTime).getHours();
+      const startingMinute = new Date(event.startTime).getMinutes();
+      const endingHour = new Date(event.endTime).getHours();
+      const endingMinute = new Date(event.endTime).getMinutes();
+      const startingPixels = `${130 + (60 * startingHour) + startingMinute}px`;
+      const endingPixels = `${130 + (60 * endingHour) + endingMinute}px`;
+      const height = `${(130 + (60 * endingHour) + endingMinute) - (130 + (60 * startingHour) + startingMinute)}px`
+      // console.log({ startingPixels, endingPixels })
+      return ({
+        ...event,
+        startingPixels,
+        endingPixels,
+        height
+      }
+      )
     })
+
+    // console.log({ eventLocations, todaysEvents })
+    setEventLocations(eventLocations);
   };
 
   useEffect(() => {
@@ -107,6 +117,9 @@ function DailyOutline(props) {
         }
 
       </div>
+      <EventLocations
+        eventLocation={eventLocations}
+      />
       <NowLine
         setCurrentMinutes={setCurrentMinutes}
         nowLineLocation={nowLineLocation}
