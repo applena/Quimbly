@@ -11,7 +11,6 @@ import DailyOutline from './components/dailyOutline/dailyOutline';
 
 let scriptAdded;
 
-
 function App(props) {
   const [show, setShow] = useState(false);
 

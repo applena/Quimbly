@@ -4,13 +4,14 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 import NowLine from './nowLine';
 import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
-import moment from 'moment';
+import config from '../../config';
 
 import './dailyOutline.scss';
 /* global gapi */
 
 function DailyOutline(props) {
   // console.log('dailyOutline', props.events); 
+
   let hourToRender = new Date().getHours() - 1;
   const [minutes, setCurrentMinutes] = useState(0);
   const [nowLineLocation, setNowLineLocation] = useState('130px');
@@ -27,15 +28,23 @@ function DailyOutline(props) {
   }, [])
 
   const generateEventLocations = (events) => {
-    let today = new Date().toLocaleString().split(',')[0];
+    let today = new Date().toISOString().split('T')[0];
     console.log({ today })
 
     // get today's events
     const todaysEvents = events.filter(event => {
-      const date = event.startTime.split('T')[0];
-      today = new Date(today).toISOString().split('T')[0];
-      console.log({ date, today })
-      return date === today;
+      const startTime = new Date(event.startTime).getTime();
+      // const endTime = new Date(event.endTime).getTime();
+      const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
+      const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
+
+      // TODO - figure out how tto render if partial events are in the window
+      if (maxTime >= startTime >= minTime) {
+        return true;
+      }
+      // const date = event.startTime.split('T')[0];
+      // // console.log({ date, today })
+      // return date === today;
     });
 
     // find the starting and ending position for each event
