@@ -11,7 +11,6 @@ function EventLocations(props) {
           top: event.startingPixels,
           height: event.height
         }
-        console.log({ eventStyle })
         return (
           <div key={i} style={eventStyle}>
             {event.event}

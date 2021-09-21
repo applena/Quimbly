@@ -4,6 +4,7 @@ import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents,
 import NowLine from './nowLine';
 import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
+import moment from 'moment';
 
 import './dailyOutline.scss';
 /* global gapi */
@@ -26,12 +27,15 @@ function DailyOutline(props) {
   }, [])
 
   const generateEventLocations = (events) => {
-    const today = new Date().toLocaleString().split(',')[0];
+    let today = new Date().toLocaleString().split(',')[0];
+    console.log({ today })
 
     // get today's events
     const todaysEvents = events.filter(event => {
-      const eventDate = new Date(event.startTime).toLocaleDateString();
-      return eventDate === today;
+      const date = event.startTime.split('T')[0];
+      today = new Date(today).toISOString().split('T')[0];
+      console.log({ date, today })
+      return date === today;
     });
 
     // find the starting and ending position for each event
