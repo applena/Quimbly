@@ -18,7 +18,7 @@ function DailyOutline(props) {
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
-        // console.log({ events })
+        console.log('todays events', { events })
         props.setEvents(events);;
         generateEventLocations(events);
       })
@@ -36,14 +36,14 @@ function DailyOutline(props) {
 
     // find the starting and ending position for each event
     const eventLocations = todaysEvents.map(event => {
-      const startingHour = new Date(event.startTime).getHours();
-      const startingMinute = new Date(event.startTime).getMinutes();
-      const endingHour = new Date(event.endTime).getHours();
-      const endingMinute = new Date(event.endTime).getMinutes();
-      const startingPixels = `${130 + (60 * startingHour) + startingMinute}px`;
-      const endingPixels = `${130 + (60 * endingHour) + endingMinute}px`;
-      const height = `${(130 + (60 * endingHour) + endingMinute) - (130 + (60 * startingHour) + startingMinute)}px`
-      // console.log({ startingPixels, endingPixels })
+      const localStartTimeHour = new Date(event.startTime).toLocaleTimeString().split(':')[0];
+      const localStartTimeMinute = new Date(event.startTime).toLocaleTimeString().split(':')[1];
+      const localEndTimeHour = new Date(event.endTime).toLocaleTimeString().split(':')[0];
+      const localEndTimeMinute = new Date(event.endTime).toLocaleTimeString().split(':')[1];
+      const startingPixels = `${228 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute)}px`;
+      const endingPixels = `${228 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)}px`;
+      const height = `${(228 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)) - (228 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute))}px`
+      console.log({ startingPixels, endingPixels, localStartTimeHour, localStartTimeMinute, localEndTimeHour, localEndTimeMinute })
       return ({
         ...event,
         startingPixels,
