@@ -20,7 +20,7 @@ function DailyOutline(props) {
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
-        console.log('todays events', { events })
+        // console.log('todays events', { events })
         props.setEvents(events);;
         generateEventLocations(events);
       })
@@ -28,9 +28,6 @@ function DailyOutline(props) {
   }, [])
 
   const generateEventLocations = (events) => {
-    let today = new Date().toISOString().split('T')[0];
-    console.log({ today })
-
     // get today's events
     const todaysEvents = events.filter(event => {
       const startTime = new Date(event.startTime).getTime();
@@ -38,24 +35,29 @@ function DailyOutline(props) {
       const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
       const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
 
-      // TODO - figure out how tto render if partial events are in the window
-      if (maxTime >= startTime >= minTime) {
+
+      if (maxTime >= startTime && startTime >= minTime) {
         return true;
       }
-      // const date = event.startTime.split('T')[0];
-      // // console.log({ date, today })
-      // return date === today;
+      if (event.event === "photoshoot with ilya") {
+        console.log('event skipped', { maxTime, startTime, minTime })
+      }
     });
+
+    console.log({ todaysEvents })
 
     // find the starting and ending position for each event
     const eventLocations = todaysEvents.map(event => {
+      // check to see if it is an all day event
+      if (!event.startTime.split('T')[1]) event.allDay = true;
+
       const localStartTimeHour = new Date(event.startTime).toLocaleTimeString().split(':')[0];
       const localStartTimeMinute = new Date(event.startTime).toLocaleTimeString().split(':')[1];
       const localEndTimeHour = new Date(event.endTime).toLocaleTimeString().split(':')[0];
       const localEndTimeMinute = new Date(event.endTime).toLocaleTimeString().split(':')[1];
-      const startingPixels = `${228 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute)}px`;
-      const endingPixels = `${228 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)}px`;
-      const height = `${(228 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)) - (228 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute))}px`
+      const startingPixels = `${-12 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute)}px`;
+      const endingPixels = `${-12 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)}px`;
+      const height = `${(-12 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)) - (-12 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute))}px`
       console.log({ startingPixels, endingPixels, localStartTimeHour, localStartTimeMinute, localEndTimeHour, localEndTimeMinute })
       return ({
         ...event,
