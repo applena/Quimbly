@@ -12,7 +12,7 @@ import './dailyOutline.scss';
 function DailyOutline(props) {
   // console.log('dailyOutline', props.events); 
 
-  let hourToRender = new Date().getHours() - 1;
+  let hourToRender = new Date().getHours() + config.MINIMUM_EVENT_TIME / 1000 / 60 / 60;
   const [minutes, setCurrentMinutes] = useState(0);
   const [nowLineLocation, setNowLineLocation] = useState('130px');
   const [eventLocations, setEventLocations] = useState([]);
@@ -28,37 +28,40 @@ function DailyOutline(props) {
   }, [])
 
   const generateEventLocations = (events) => {
+    const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
+    const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
     // get today's events
     const todaysEvents = events.filter(event => {
+      // check to see if it is an all day event
+      if (!event.startTime.split('T')[1]) return false;
+
       const startTime = new Date(event.startTime).getTime();
       // const endTime = new Date(event.endTime).getTime();
-      const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
-      const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
 
 
       if (maxTime >= startTime && startTime >= minTime) {
         return true;
       }
-      if (event.event === "photoshoot with ilya") {
-        console.log('event skipped', { maxTime, startTime, minTime })
-      }
+
     });
 
     console.log({ todaysEvents })
 
     // find the starting and ending position for each event
     const eventLocations = todaysEvents.map(event => {
-      // check to see if it is an all day event
-      if (!event.startTime.split('T')[1]) event.allDay = true;
 
-      const localStartTimeHour = new Date(event.startTime).toLocaleTimeString().split(':')[0];
-      const localStartTimeMinute = new Date(event.startTime).toLocaleTimeString().split(':')[1];
-      const localEndTimeHour = new Date(event.endTime).toLocaleTimeString().split(':')[0];
-      const localEndTimeMinute = new Date(event.endTime).toLocaleTimeString().split(':')[1];
-      const startingPixels = `${-12 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute)}px`;
-      const endingPixels = `${-12 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)}px`;
-      const height = `${(-12 + (60 * Number(localEndTimeHour)) + Number(localEndTimeMinute)) - (-12 + (60 * Number(localStartTimeHour)) + Number(localStartTimeMinute))}px`
-      console.log({ startingPixels, endingPixels, localStartTimeHour, localStartTimeMinute, localEndTimeHour, localEndTimeMinute })
+      const currentWindowHourStart = new Date(minTime).getHours();
+
+      const startTimeHour = new Date(event.startTime).getHours() - currentWindowHourStart;
+      const startTimeMinute = new Date(event.startTime).getMinutes();
+      const endTimeHour = new Date(event.endTime).getHours() - currentWindowHourStart;
+      const endTimeMinute = new Date(event.endTime).getMinutes();
+      console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime })
+
+      const startingPixels = `${167 + (60 * startTimeHour) + startTimeMinute}px`;
+      const endingPixels = `${167 + (60 * endTimeHour) + endTimeMinute}px`;
+      const height = `${(167 + (60 * endTimeHour) + endTimeMinute) - (167 + (60 * startTimeHour) + startTimeMinute)}px`
+      console.log({ startingPixels, endingPixels, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute })
       return ({
         ...event,
         startingPixels,
