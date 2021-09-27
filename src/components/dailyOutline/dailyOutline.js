@@ -20,7 +20,6 @@ function DailyOutline(props) {
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
-        // console.log('todays events', { events })
         props.setEvents(events);;
         generateEventLocations(events);
       })
@@ -30,14 +29,22 @@ function DailyOutline(props) {
   const generateEventLocations = (events) => {
     const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
     const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
+
     // get today's events
     const todaysEvents = events.filter(event => {
       // check to see if it is an all day event
-      if (!event.startTime.split('T')[1]) return false;
+      // google cal returns all day events as the previous day so we need to add one to get the correct day
+      if (!event.startTime.split('T')[1]) {
+        if (new Date(event.startTime).getDate() + 1 === new Date().getDate()) {
+          event.allDay = true;
+          return true;
+        } else {
+          return false;
+        }
+      }
 
       const startTime = new Date(event.startTime).getTime();
       // const endTime = new Date(event.endTime).getTime();
-
 
       if (maxTime >= startTime && startTime >= minTime) {
         return true;
@@ -45,11 +52,12 @@ function DailyOutline(props) {
 
     });
 
+    // console.log({ todaysEvents })
+
     const allEventLocations = [];
 
     // find the starting and ending position for each event
     const eventLocations = todaysEvents.map((event, idx) => {
-
       const newEvent = {
         ...event,
         startingPixels: 0,
@@ -69,9 +77,9 @@ function DailyOutline(props) {
       console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime });
 
 
-      newEvent.startingPixels = `${167 + (60 * startTimeHour) + startTimeMinute}px`;
-      newEvent.endingPixels = `${167 + (60 * endTimeHour) + endTimeMinute}px`;
-      newEvent.height = `${(167 + (60 * endTimeHour) + endTimeMinute) - (167 + (60 * startTimeHour) + startTimeMinute)}px`;
+      newEvent.startingPixels = `${171 + (60 * startTimeHour) + startTimeMinute}px`;
+      newEvent.endingPixels = `${171 + (60 * endTimeHour) + endTimeMinute}px`;
+      newEvent.height = `${(171 + (60 * endTimeHour) + endTimeMinute) - (171 + (60 * startTimeHour) + startTimeMinute)}px`;
 
       allEventLocations.push(newEvent)
 
@@ -80,12 +88,19 @@ function DailyOutline(props) {
           newEvent.numOfEvents++;
           newEvent.left = `${newEvent.numOfEvents * 180}px`;
         }
-      })
+      });
+
+      if (event.allDay) {
+        newEvent.startingPixels = '139px';
+        newEvent.left = '50px';
+        newEvent.zIndex = 5;
+        console.log('checking for an all day event', { event, newEvent })
+      }
 
       return (newEvent)
     })
 
-    console.log({ eventLocations, todaysEvents })
+    // console.log({ eventLocations, todaysEvents })
     setEventLocations(eventLocations);
   };
 
@@ -118,7 +133,7 @@ function DailyOutline(props) {
   const dateContainer = {
     backgroundColor: 'white',
     position: 'fixed',
-    top: '130px',
+    top: '140px',
     borderBottom: '2px solid black',
     width: '100%',
     height: '39px',

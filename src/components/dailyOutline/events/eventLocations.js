@@ -13,7 +13,8 @@ function EventLocations(props) {
           color: 'white',
           padding: '1em',
           width: event.width,
-          left: event.left
+          left: event.left,
+          zIndex: event.zIndex
         }
         return (
           <div key={i} style={eventStyle}>
