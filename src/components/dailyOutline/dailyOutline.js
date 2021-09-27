@@ -56,7 +56,8 @@ function DailyOutline(props) {
         endingPixels: 0,
         height: 0,
         left: 0,
-        width: '200px'
+        width: '200px',
+        numOfEvents: 0
       }
 
       const currentWindowHourStart = new Date(minTime).getHours();
@@ -76,7 +77,8 @@ function DailyOutline(props) {
 
       allEventLocations.forEach((e, i) => {
         if (e.startingPixels >= newEvent.startingPixels && e.endingPixels <= newEvent.endingPixels && i !== idx) {
-          newEvent.left = '180px';
+          newEvent.numOfEvents++;
+          newEvent.left = `${newEvent.numOfEvents * 180}px`;
         }
       })
 
