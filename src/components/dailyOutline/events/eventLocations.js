@@ -9,7 +9,11 @@ function EventLocations(props) {
           backgroundColor: event.color,
           position: 'absolute',
           top: event.startingPixels,
-          height: event.height
+          height: event.height,
+          color: 'white',
+          padding: '1em',
+          width: event.width,
+          left: event.left
         }
         return (
           <div key={i} style={eventStyle}>

@@ -45,10 +45,19 @@ function DailyOutline(props) {
 
     });
 
-    console.log({ todaysEvents })
+    const allEventLocations = [];
 
     // find the starting and ending position for each event
-    const eventLocations = todaysEvents.map(event => {
+    const eventLocations = todaysEvents.map((event, idx) => {
+
+      const newEvent = {
+        ...event,
+        startingPixels: 0,
+        endingPixels: 0,
+        height: 0,
+        left: 0,
+        width: '200px'
+      }
 
       const currentWindowHourStart = new Date(minTime).getHours();
 
@@ -56,22 +65,25 @@ function DailyOutline(props) {
       const startTimeMinute = new Date(event.startTime).getMinutes();
       const endTimeHour = new Date(event.endTime).getHours() - currentWindowHourStart;
       const endTimeMinute = new Date(event.endTime).getMinutes();
-      console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime })
+      console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime });
 
-      const startingPixels = `${167 + (60 * startTimeHour) + startTimeMinute}px`;
-      const endingPixels = `${167 + (60 * endTimeHour) + endTimeMinute}px`;
-      const height = `${(167 + (60 * endTimeHour) + endTimeMinute) - (167 + (60 * startTimeHour) + startTimeMinute)}px`
-      console.log({ startingPixels, endingPixels, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute })
-      return ({
-        ...event,
-        startingPixels,
-        endingPixels,
-        height
-      }
-      )
+
+      newEvent.startingPixels = `${167 + (60 * startTimeHour) + startTimeMinute}px`;
+      newEvent.endingPixels = `${167 + (60 * endTimeHour) + endTimeMinute}px`;
+      newEvent.height = `${(167 + (60 * endTimeHour) + endTimeMinute) - (167 + (60 * startTimeHour) + startTimeMinute)}px`;
+
+      allEventLocations.push(newEvent)
+
+      allEventLocations.forEach((e, i) => {
+        if (e.startingPixels >= newEvent.startingPixels && e.endingPixels <= newEvent.endingPixels && i !== idx) {
+          newEvent.left = '180px';
+        }
+      })
+
+      return (newEvent)
     })
 
-    // console.log({ eventLocations, todaysEvents })
+    console.log({ eventLocations, todaysEvents })
     setEventLocations(eventLocations);
   };
 
