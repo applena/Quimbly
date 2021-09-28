@@ -17,6 +17,8 @@ function DailyOutline(props) {
   const [nowLineLocation, setNowLineLocation] = useState('130px');
   const [eventLocations, setEventLocations] = useState([]);
 
+  console.log({ hourToRender })
+
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
@@ -105,7 +107,7 @@ function DailyOutline(props) {
   };
 
   useEffect(() => {
-    setNowLineLocation(165 + 60 + minutes);
+    setNowLineLocation(171 + 120 + minutes);
   }, [minutes]);
 
 
