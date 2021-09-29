@@ -17,8 +17,6 @@ function DailyOutline(props) {
   const [nowLineLocation, setNowLineLocation] = useState('130px');
   const [eventLocations, setEventLocations] = useState([]);
 
-  console.log({ hourToRender })
-
   useEffect(() => {
     getUpcomingEvents(props.calendars, props.config)
       .then(events => {
@@ -70,17 +68,19 @@ function DailyOutline(props) {
         numOfEvents: 0
       }
 
+      const todaysDate = new Date().getDate();
+      const eventDate = new Date(event.startTime).getDate();
+
       const currentWindowHourStart = new Date(minTime).getHours();
 
       const startTimeHour = new Date(event.startTime).getHours() - currentWindowHourStart;
       const startTimeMinute = new Date(event.startTime).getMinutes();
       const endTimeHour = new Date(event.endTime).getHours() - currentWindowHourStart;
       const endTimeMinute = new Date(event.endTime).getMinutes();
-      console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime });
+      // console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime });
 
-
-      newEvent.startingPixels = `${171 + (60 * startTimeHour) + startTimeMinute}px`;
-      newEvent.endingPixels = `${171 + (60 * endTimeHour) + endTimeMinute}px`;
+      newEvent.startingPixels = todaysDate === eventDate ? `${171 + (60 * startTimeHour) + startTimeMinute}px` : `${171 + (24 * 60) + (60 * startTimeHour) + startTimeMinute}px`;
+      newEvent.endingPixels = todaysDate === eventDate ? `${171 + (60 * endTimeHour) + endTimeMinute}px` : `${171 + (24 * 60) + (60 * endTimeHour) + endTimeMinute}px`;
       newEvent.height = `${(171 + (60 * endTimeHour) + endTimeMinute) - (171 + (60 * startTimeHour) + startTimeMinute)}px`;
 
       allEventLocations.push(newEvent)
