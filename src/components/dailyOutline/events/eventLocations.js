@@ -1,7 +1,7 @@
 import React from 'react';
 
 function EventLocations(props) {
-  console.log({ props })
+  // console.log({ props })
   return (
     <div id="event-locations">
       {props.eventLocation && props.eventLocation.map((event, i) => {

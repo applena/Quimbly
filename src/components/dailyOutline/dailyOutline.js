@@ -14,7 +14,7 @@ function DailyOutline(props) {
 
   let hourToRender = new Date().getHours() + config.MINIMUM_EVENT_TIME / 1000 / 60 / 60;
   const [minutes, setCurrentMinutes] = useState(0);
-  const [nowLineLocation, setNowLineLocation] = useState('130px');
+  const [nowLineLocation, setNowLineLocation] = useState('135px');
   const [eventLocations, setEventLocations] = useState([]);
 
   useEffect(() => {
@@ -79,9 +79,9 @@ function DailyOutline(props) {
       const endTimeMinute = new Date(event.endTime).getMinutes();
       // console.log(event.event, { startTimeHour, startTimeMinute, endTimeMinute, endTimeMinute, currentWindowHourStart, minTime });
 
-      newEvent.startingPixels = todaysDate === eventDate ? `${171 + (60 * startTimeHour) + startTimeMinute}px` : `${171 + (24 * 60) + (60 * startTimeHour) + startTimeMinute}px`;
-      newEvent.endingPixels = todaysDate === eventDate ? `${171 + (60 * endTimeHour) + endTimeMinute}px` : `${171 + (24 * 60) + (60 * endTimeHour) + endTimeMinute}px`;
-      newEvent.height = `${(171 + (60 * endTimeHour) + endTimeMinute) - (171 + (60 * startTimeHour) + startTimeMinute)}px`;
+      newEvent.startingPixels = todaysDate === eventDate ? `${config.OUTLINE_OFFSET + (60 * startTimeHour) + startTimeMinute}px` : `${config.OUTLINE_OFFSET + (24 * 60) + (60 * startTimeHour) + startTimeMinute}px`;
+      newEvent.endingPixels = todaysDate === eventDate ? `${config.OUTLINE_OFFSET + (60 * endTimeHour) + endTimeMinute}px` : `${config.OUTLINE_OFFSET + (24 * 60) + (60 * endTimeHour) + endTimeMinute}px`;
+      newEvent.height = `${(config.OUTLINE_OFFSET + (60 * endTimeHour) + endTimeMinute) - (config.OUTLINE_OFFSET + (60 * startTimeHour) + startTimeMinute)}px`;
 
       allEventLocations.push(newEvent)
 
@@ -96,7 +96,7 @@ function DailyOutline(props) {
         newEvent.startingPixels = '139px';
         newEvent.left = '50px';
         newEvent.zIndex = 5;
-        console.log('checking for an all day event', { event, newEvent })
+        // console.log('checking for an all day event', { event, newEvent })
       }
 
       return (newEvent)
@@ -107,7 +107,7 @@ function DailyOutline(props) {
   };
 
   useEffect(() => {
-    setNowLineLocation(171 + 120 + minutes);
+    setNowLineLocation(config.OUTLINE_OFFSET + 120 + minutes);
   }, [minutes]);
 
 
@@ -135,7 +135,7 @@ function DailyOutline(props) {
   const dateContainer = {
     backgroundColor: 'white',
     position: 'fixed',
-    top: '140px',
+    top: '135px',
     borderBottom: '2px solid black',
     width: '100%',
     height: '39px',
