@@ -85,8 +85,10 @@ function DailyOutline(props) {
 
       allEventLocations.push(newEvent)
 
+      console.log({ allEventLocations })
       allEventLocations.forEach((e, i) => {
-        if (e.startingPixels >= newEvent.startingPixels && e.endingPixels <= newEvent.endingPixels && i !== idx) {
+        if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels <= e.endingPixels) && i !== idx) {
+          console.log(newEvent.event, 'found a dup event', e, newEvent);
           newEvent.numOfEvents++;
           newEvent.left = `${newEvent.numOfEvents * 180}px`;
         }
