@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/personal-growth/static/css/main.ac6c2e0e.chunk.css",
+    "main.js": "/personal-growth/static/js/main.9fe69def.chunk.js",
+    "main.js.map": "/personal-growth/static/js/main.9fe69def.chunk.js.map",
+    "runtime-main.js": "/personal-growth/static/js/runtime-main.6e3b396d.js",
+    "runtime-main.js.map": "/personal-growth/static/js/runtime-main.6e3b396d.js.map",
+    "static/css/2.d22f252f.chunk.css": "/personal-growth/static/css/2.d22f252f.chunk.css",
+    "static/js/2.800265a2.chunk.js": "/personal-growth/static/js/2.800265a2.chunk.js",
+    "static/js/2.800265a2.chunk.js.map": "/personal-growth/static/js/2.800265a2.chunk.js.map",
+    "index.html": "/personal-growth/index.html",
+    "static/css/2.d22f252f.chunk.css.map": "/personal-growth/static/css/2.d22f252f.chunk.css.map",
+    "static/css/main.ac6c2e0e.chunk.css.map": "/personal-growth/static/css/main.ac6c2e0e.chunk.css.map",
+    "static/js/2.800265a2.chunk.js.LICENSE.txt": "/personal-growth/static/js/2.800265a2.chunk.js.LICENSE.txt",
+    "static/media/quimbly.8567d3c3.png": "/personal-growth/static/media/quimbly.8567d3c3.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6e3b396d.js",
+    "static/css/2.d22f252f.chunk.css",
+    "static/js/2.800265a2.chunk.js",
+    "static/css/main.ac6c2e0e.chunk.css",
+    "static/js/main.9fe69def.chunk.js"
+  ]
+}
