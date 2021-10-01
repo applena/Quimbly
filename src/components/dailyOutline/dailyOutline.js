@@ -93,7 +93,7 @@ function DailyOutline(props) {
       });
 
       if (event.allDay) {
-        newEvent.startingPixels = '139px';
+        newEvent.startingPixels = '183px';
         newEvent.left = '50px';
         newEvent.zIndex = 5;
         // console.log('checking for an all day event', { event, newEvent })
@@ -135,7 +135,7 @@ function DailyOutline(props) {
   const dateContainer = {
     backgroundColor: 'white',
     position: 'fixed',
-    top: '135px',
+    top: '180px',
     borderBottom: '2px solid black',
     width: '100%',
     height: '39px',

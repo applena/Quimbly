@@ -15,6 +15,7 @@ function EventLocations(props) {
           width: event.width,
           left: event.left,
           textAlign: 'center',
+          border: '1px solid gray',
           zIndex: event.zIndex
         }
         return (
