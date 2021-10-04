@@ -54,7 +54,7 @@ function DailyOutline(props) {
 
     // console.log({ todaysEvents })
 
-    const allEventLocations = [];
+    const allEventLocations = {};
 
     // find the starting and ending position for each event
     const eventLocations = todaysEvents.map((event, idx) => {
@@ -83,16 +83,24 @@ function DailyOutline(props) {
       newEvent.endingPixels = todaysDate === eventDate ? `${config.OUTLINE_OFFSET + (60 * endTimeHour) + endTimeMinute}px` : `${config.OUTLINE_OFFSET + (24 * 60) + (60 * endTimeHour) + endTimeMinute}px`;
       newEvent.height = `${(config.OUTLINE_OFFSET + (60 * endTimeHour) + endTimeMinute) - (config.OUTLINE_OFFSET + (60 * startTimeHour) + startTimeMinute)}px`;
 
-      allEventLocations.push(newEvent)
+      allEventLocations[event.id] = newEvent;
 
-      console.log({ allEventLocations })
-      allEventLocations.forEach((e, i) => {
-        if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels <= e.endingPixels) && i !== idx) {
-          console.log(newEvent.event, 'found a dup event', e, newEvent);
-          newEvent.numOfEvents++;
-          newEvent.left = `${newEvent.numOfEvents * 180}px`;
+      // console.log({ allEventLocations });
+
+      Object.values(allEventLocations).forEach((e, i) => {
+        if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels < e.endingPixels) && i !== idx) {
+          if (allEventLocations[newEvent.id].position) {
+            console.log('there was a position key so adding one to it');
+            allEventLocations[newEvent.id].position += 1;
+          } else {
+            console.log('there was not a position key so creating one');
+            allEventLocations[newEvent.id].position = 1;
+          }
+          console.log(newEvent.event, 'found a dup event', e.event, 'original event', newEvent, e);
+
+          newEvent.left = `${allEventLocations[newEvent.id].position * 130}px`;
         }
-      });
+      })
 
       if (event.allDay) {
         newEvent.startingPixels = '183px';

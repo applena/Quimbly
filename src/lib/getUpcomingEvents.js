@@ -17,6 +17,7 @@ const getUpcomingEvents = async (calendars, config) => {
 
   allEvents = allEvents.map((eventArray, idx) => {
     return eventArray.map(event => ({
+      id: event.id,
       calendar: visibleCalendars[idx].summary,
       color: visibleCalendars[idx].backgroundColor,
       event: event.summary,
