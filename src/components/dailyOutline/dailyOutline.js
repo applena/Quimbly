@@ -65,7 +65,7 @@ function DailyOutline(props) {
         height: 0,
         left: 0,
         width: '200px',
-        numOfEvents: 0
+        position: 0
       }
 
       const todaysDate = new Date().getDate();
@@ -89,16 +89,10 @@ function DailyOutline(props) {
 
       Object.values(allEventLocations).forEach((e, i) => {
         if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels < e.endingPixels) && i !== idx) {
-          if (allEventLocations[newEvent.id].position) {
-            console.log('there was a position key so adding one to it');
-            allEventLocations[newEvent.id].position += 1;
-          } else {
-            console.log('there was not a position key so creating one');
-            allEventLocations[newEvent.id].position = 1;
-          }
-          console.log(newEvent.event, 'found a dup event', e.event, 'original event', newEvent, e);
 
-          newEvent.left = `${allEventLocations[newEvent.id].position * 130}px`;
+          newEvent.position = e.position + 1;
+
+          newEvent.left = `${newEvent.position * 130}px`;
         }
       })
 
