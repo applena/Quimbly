@@ -89,9 +89,7 @@ function DailyOutline(props) {
 
       Object.values(allEventLocations).forEach((e, i) => {
         if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels < e.endingPixels) && i !== idx) {
-
           newEvent.position = e.position + 1;
-
           newEvent.left = `${newEvent.position * 130}px`;
         }
       })

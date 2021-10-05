@@ -23,12 +23,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import './addEvent.scss';
 
 function AddEvent(props) {
-  //console.log('addEvent', { props });
 
   const today = new Date().toISOString().split('T')[0];
   const now = new Date().toLocaleTimeString().substring(0, 5);
-  const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toLocaleTimeString().substring(0, 5);
+  const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toISOString().split('T')[1].split('.')[0];
+
+  // let expiryDate2 = new Date(Date.now() + 1 * (60 * 60 * 1000) );;
+  // const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toLocaleTimeString().substring(0, 5);
   let event = {};
+
+  console.log('addEvent', { props, today, oneHour });
 
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
@@ -113,69 +117,71 @@ function AddEvent(props) {
         open={show}
         onClose={handleClose}
       >
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h5" component="h2">Add Event</Typography>
-            <form>
-              <TextField onChange={(e) => setEventName(e.target.value)} id="event-name" label="Event Name" />
-              <TextField onChange={(e) => setEventLocation(e.target.value)} id="event-location" label="Event Location" />
-              <TextField onChange={(e) => setDescription(e.target.value)} id="event-description" label="Event Description" />
-              <TextField
-                onChange={(e) => setEventDate(e.target.value)}
-                type="date"
-                defaultValue={today}
-                id="event-date"
-                label="Event Date" />
-              <TextField
-                onChange={(e) => setEventStartTime(e.target.value)}
-                label="Event Start Time"
-                type="time"
-                defaultValue={now}
-                id="event-start-time" />
-              <TextField
-                onChange={(e) => setEventEndTime(e.target.value)}
-                label="Event End Time"
-                type="time"
-                defaultValue={oneHour}
-                id="event-end-time" />
-              <TextField
+        {today && oneHour ?
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h5" component="h2">Add Event</Typography>
+              <form>
+                <TextField onChange={(e) => setEventName(e.target.value)} id="event-name" label="Event Name" />
+                <TextField onChange={(e) => setEventLocation(e.target.value)} id="event-location" label="Event Location" />
+                <TextField onChange={(e) => setDescription(e.target.value)} id="event-description" label="Event Description" />
+                <TextField
+                  onChange={(e) => setEventDate(e.target.value)}
+                  type="date"
+                  defaultValue={today}
+                  id="event-date"
+                  label="Event Date" />
+                <TextField
+                  onChange={(e) => setEventStartTime(e.target.value)}
+                  label="Event Start Time"
+                  type="time"
+                  defaultValue={now}
+                  id="event-start-time" />
+                <TextField
+                  onChange={(e) => setEventEndTime(e.target.value)}
+                  label="Event End Time"
+                  type="time"
+                  defaultValue={oneHour}
+                  id="event-end-time" />
+                {/* <TextField
                 onChange={(e) => setAttendeeEmail([...attendeeEmail, { email: e.target.value }])}
                 label="Email of Attendee"
-                id="attendee-email" />
-              <FormControl component="fieldset">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox onChange={() => setDisplayRecurringEvent(!displayRecurringEvent)} />}
-                    label="Recurring Event"
-                  />
-                </FormGroup>
-              </FormControl>
-              {displayRecurringEvent &&
-                <FormControl>
-                  <InputLabel>Repeats</InputLabel>
-                  <Select
-                    // value={age}
-                    onChange={(e) => setRecurringFrequency(e.target.value)}
-                  >
-                    <MenuItem value="DAILY">Daily</MenuItem>
-                    <MenuItem value="WEEKLY">Weekly</MenuItem>
-                    <MenuItem value="MONTHLY">Monthly</MenuItem>
-                    <MenuItem value="YEARLY">Yearly</MenuItem>
-                  </Select>
-
-                  <TextField
-                    onChange={handleEndDate}
-                    type="date"
-                    defaultValue={today}
-                    id="recurring-event-date"
-                    label="End Date" />
+                id="attendee-email" /> */}
+                <FormControl component="fieldset">
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox onChange={() => setDisplayRecurringEvent(!displayRecurringEvent)} />}
+                      label="Recurring Event"
+                    />
+                  </FormGroup>
                 </FormControl>
-              }
-              <Button onClick={() => setShow(false)} variant="outlined" color="secondary">Close</Button>
-              <Button onClick={saveEvent} variant="outlined" color="primary">Save changes</Button>
-            </form>
-          </CardContent>
-        </Card>
+                {displayRecurringEvent &&
+                  <FormControl>
+                    <InputLabel>Repeats</InputLabel>
+                    <Select
+                      // value={age}
+                      onChange={(e) => setRecurringFrequency(e.target.value)}
+                    >
+                      <MenuItem value="DAILY">Daily</MenuItem>
+                      <MenuItem value="WEEKLY">Weekly</MenuItem>
+                      <MenuItem value="MONTHLY">Monthly</MenuItem>
+                      <MenuItem value="YEARLY">Yearly</MenuItem>
+                    </Select>
+
+                    <TextField
+                      onChange={handleEndDate}
+                      type="date"
+                      defaultValue={today}
+                      id="recurring-event-date"
+                      label="End Date" />
+                  </FormControl>
+                }
+                <Button onClick={() => setShow(false)} variant="outlined" color="secondary">Close</Button>
+                <Button onClick={saveEvent} variant="outlined" color="primary">Save changes</Button>
+              </form>
+            </CardContent>
+          </Card>
+          : ''}
       </Modal>
     </div>
   )
