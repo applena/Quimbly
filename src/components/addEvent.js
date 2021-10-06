@@ -25,25 +25,20 @@ import './addEvent.scss';
 function AddEvent(props) {
 
   const today = new Date().toISOString().split('T')[0];
-  let now = new Date().toLocaleTimeString().substring(0, 5);
-  let oneHour = new Date(new Date(new Date().setHours(new Date().getHours() + 1)).toISOString()).toLocaleTimeString().split(' ')[0].substring(0, 5);
+  let nowHours = new Date().getHours();
+  let nowMinutes = new Date().getMinutes();
 
-  // adds a '0' in front of single digit hours
-  let oneHourHour = oneHour.split(':')[0];
-  if (oneHourHour.length === 1) {
-    oneHourHour = `0${oneHourHour}`;
-  }
-  oneHour = `${oneHourHour}:${oneHour.split(':')[1]}`;
+  let oneHourHour = `${nowHours + 1}`.padStart(2, '0');
+  let nowHoursString = `${nowHours}`.padStart(2, '0');
 
-  let nowHour = now.split(':')[0];
-  if (nowHour.length === 1) {
-    nowHour = `0${nowHour}`;
-  }
-  now = `${nowHour}:${now.split(':')[1]}`;
+  const nowMinutesString = `${nowMinutes}`.padStart(2, '0');
+
+  const nowString = `${nowHoursString}:${nowMinutesString}`;
+  const oneHourString = `${oneHourHour}:${nowMinutesString}`;
 
   let event = {};
 
-  console.log('addEvent', { props, today, now, oneHour });
+  // console.log('addEvent', { props, today, nowString, oneHourString });
 
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
@@ -51,8 +46,8 @@ function AddEvent(props) {
   const [location, setEventLocation] = useState('');
   const [description, setDescription] = useState('');
   const [eventDate, setEventDate] = useState(today);
-  const [eventStartTime, setEventStartTime] = useState(now);
-  const [eventEndTime, setEventEndTime] = useState(oneHour);
+  const [eventStartTime, setEventStartTime] = useState(nowString);
+  const [eventEndTime, setEventEndTime] = useState(oneHourString);
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState(false);
   const [recurringEndDate, setRecurringEndDate] = useState(today)
@@ -128,7 +123,7 @@ function AddEvent(props) {
         open={show}
         onClose={handleClose}
       >
-        {today && oneHour ?
+        {today && oneHourString ?
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h5" component="h2">Add Event</Typography>
@@ -146,13 +141,13 @@ function AddEvent(props) {
                   onChange={(e) => setEventStartTime(e.target.value)}
                   label="Event Start Time"
                   type="time"
-                  defaultValue={now}
+                  defaultValue={nowString}
                   id="event-start-time" />
                 <TextField
                   onChange={(e) => setEventEndTime(e.target.value)}
                   label="Event End Time"
                   type="time"
-                  defaultValue={oneHour}
+                  defaultValue={oneHourString}
                   id="event-end-time" />
                 {/* <TextField
                 onChange={(e) => setAttendeeEmail([...attendeeEmail, { email: e.target.value }])}
