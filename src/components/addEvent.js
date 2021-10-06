@@ -25,14 +25,25 @@ import './addEvent.scss';
 function AddEvent(props) {
 
   const today = new Date().toISOString().split('T')[0];
-  const now = new Date().toLocaleTimeString().substring(0, 5);
-  const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toISOString().split('T')[1].split('.')[0];
+  let now = new Date().toLocaleTimeString().substring(0, 5);
+  let oneHour = new Date(new Date(new Date().setHours(new Date().getHours() + 1)).toISOString()).toLocaleTimeString().split(' ')[0].substring(0, 5);
 
-  // let expiryDate2 = new Date(Date.now() + 1 * (60 * 60 * 1000) );;
-  // const oneHour = new Date(new Date().setHours(new Date().getHours() + 1)).toLocaleTimeString().substring(0, 5);
+  // adds a '0' in front of single digit hours
+  let oneHourHour = oneHour.split(':')[0];
+  if (oneHourHour.length === 1) {
+    oneHourHour = `0${oneHourHour}`;
+  }
+  oneHour = `${oneHourHour}:${oneHour.split(':')[1]}`;
+
+  let nowHour = now.split(':')[0];
+  if (nowHour.length === 1) {
+    nowHour = `0${nowHour}`;
+  }
+  now = `${nowHour}:${now.split(':')[1]}`;
+
   let event = {};
 
-  console.log('addEvent', { props, today, oneHour });
+  console.log('addEvent', { props, today, now, oneHour });
 
   const [attendeeEmail, setAttendeeEmail] = useState([])
   const [show, setShow] = useState(false);
