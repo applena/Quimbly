@@ -10,10 +10,7 @@ async function loadConfig(calendars) {
 
   console.log('found quimblyCal in loadConfig', { quimblyCalendar })
 
-  // console.log({quimblyCalendar})
-
   if (!quimblyCalendar) {
-
     // if Quimbly calendar doesn't exist, create Quimbly calendar
     console.log('no quimbly calendar - creating one')
     quimblyCalendar = await createConfig();
@@ -32,6 +29,7 @@ async function loadConfig(calendars) {
     await saveConfig(config, quimblyCalendar.id);
   }
 
+  // console.log('hoping these exist: ', { config, quimblyCalendar })
   return { config, quimblyCalendar };
 
 }

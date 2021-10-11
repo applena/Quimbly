@@ -101,7 +101,7 @@ function AddEvent(props) {
       ]
     }
 
-    // console.log({ event })
+    console.log({ event })
 
     const request = gapi.client.calendar.events.insert({
       'calendarId': props.quimblyCalendar.id,
@@ -198,6 +198,7 @@ function AddEvent(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar };
 
 const mapStateToProps = state => {
+  console.log('ADD EVENT: REDUX', state)
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,

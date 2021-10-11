@@ -12,7 +12,7 @@ function LogoutButton(props) {
   }
 
   return (
-    <Button variant="outlined" onClick={signOut}>Log Out</Button>
+    <Button style={{ zIndex: "10" }} variant="outlined" onClick={signOut}>Log Out</Button>
   )
 }
 

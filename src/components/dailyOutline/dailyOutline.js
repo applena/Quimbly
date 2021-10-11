@@ -31,7 +31,7 @@ function DailyOutline(props) {
     const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
     const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
 
-    console.log('Step 1: events', { events })
+    // console.log('Step 1: events', { events })
 
     // get today's events
     const todaysEvents = events.filter(event => {
