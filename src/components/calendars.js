@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn } from '../store/actions';
 import saveConfig from './helperFunctions/saveConfig';
 import getUpcomingEvents from '../lib/getUpcomingEvents';
 
@@ -17,10 +17,10 @@ function Calendars(props) {
 
   const toggleCalendar = async (e) => {
     setSelectedCalendars([...selectedCalendars, e.target.value]);
-    // don't let them remove myQ
+    // don't let them remove Quimbly
 
     let chosenCalendar = e.target.value;
-    if (chosenCalendar === 'myQ') return;
+    if (chosenCalendar === 'Quimbly') return;
 
     let newHiddenCalendars = [];
 
@@ -38,7 +38,7 @@ function Calendars(props) {
 
     props.setConfig(config);
     // save it to the config
-    saveConfig(config, props.myQCalendar.id);
+    saveConfig(config, props.quimblyCalendar.id);
 
     getUpcomingEvents(props.calendars, config)
       .then(events => {
@@ -76,7 +76,7 @@ function Calendars(props) {
   )
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
   // console.log('CALENDARS: mapStateToProps', state)
@@ -85,7 +85,7 @@ const mapStateToProps = state => {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    myQCalendar: state.reduxData.myQCalendar,
+    quimblyCalendar: state.reduxData.quimblyCalendar,
     events: state.reduxData.events
   }
 };

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar } from '../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar } from '../store/actions';
 import moment from 'moment';
 
 import Modal from "@material-ui/core/Modal";
@@ -79,11 +79,11 @@ function AddEvent(props) {
       'description': description,
       'start': {
         'dateTime': startDateTime,//'2015-05-28T09:00:00-07:00', 2021-07-10T21:20:24.453Z
-        'timeZone': props.myQCalendar.timeZone// default Quimbly time zone
+        'timeZone': props.quimblyCalendar.timeZone// default Quimbly time zone
       },
       'end': {
         'dateTime': endDateTime,//'2015-05-28T17:00:00-07:00', TODO - add an hour
-        'timeZone': props.myQCalendar.timeZone
+        'timeZone': props.quimblyCalendar.timeZone
       },
       'attendees': attendeeEmail,
       // 'reminders': {
@@ -104,13 +104,15 @@ function AddEvent(props) {
     // console.log({ event })
 
     const request = gapi.client.calendar.events.insert({
-      'calendarId': props.myQCalendar.id,
+      'calendarId': props.quimblyCalendar.id,
       'resource': event
     });
 
     request.execute(function (event) {
       console.log('Event created: ' + event.htmlLink);
     });
+
+    props.updateEvents(event)
 
     handleClose();
   }
@@ -193,13 +195,13 @@ function AddEvent(props) {
   )
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar };
 
 const mapStateToProps = state => {
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    myQCalendar: state.reduxData.myQCalendar
+    quimblyCalendar: state.reduxData.quimblyCalendar
   })
 };
 

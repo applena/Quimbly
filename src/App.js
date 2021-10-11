@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Layout from './components/layout';
 // import User from './components/user';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from './store/actions';
-import AddEvent from './components/addEvent';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn } from './store/actions';
+// import AddEvent from './components/addEvent';
 import loadConfig from './components/helperFunctions/loadConfig';
 import DailyOutline from './components/dailyOutline/dailyOutline';
 
@@ -35,15 +35,15 @@ function App(props) {
         //returns an array of calendar objects and all of their prefrences (id, url, color, ...)
         // TODO: loading annimation
         let calendars = response.result.items;
-        const { config, myQCalendar } = await loadConfig(calendars);
-        if (!calendars.find((calendar) => calendar.id === myQCalendar.id)) {
-          calendars.push(myQCalendar);
+        const { config, quimblyCalendar } = await loadConfig(calendars);
+        if (!calendars.find((calendar) => calendar.id === quimblyCalendar.id)) {
+          calendars.push(quimblyCalendar);
         }
 
         props.setConfig(config);
         props.setCalendars(calendars);
-        props.setMyQCalendar(myQCalendar);
-        console.log('config!!!', { config, calendars, myQCalendar })
+        props.setQuimblyCalendar(quimblyCalendar);
+        // console.log('config!!!', { config, calendars, quimblyCalendar })
 
         setShow(true);
       }
@@ -98,14 +98,13 @@ function App(props) {
           {/* <User /> */}
           {/* <UpcomingEvents /> */}
           <DailyOutline />
-          <AddEvent />
         </div>
       }
     </Layout>
   );
 };
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
   // console.log('APP: mapStateToProps', state)
@@ -114,7 +113,7 @@ const mapStateToProps = state => {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    myQCalendar: state.reduxData.myQCalendar,
+    quimblyCalendar: state.reduxData.quimblyCalendar,
     events: state.reduxData.events
   }
 };

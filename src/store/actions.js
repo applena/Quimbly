@@ -21,13 +21,14 @@ export const setCalendars = payload => {
     payload,
   };
 };
-export const setMyQCalendar = payload => {
-  // console.log('in setMyQCalendar actions with', payload)
+export const setQuimblyCalendar = payload => {
+  // console.log('in setQuimblyCalendar actions with', payload)
   return {
-    type: 'SETMYQCALENDAR',
+    type: 'SETQUIMBLYCALENDAR',
     payload,
   };
 };
+
 export const setConfig = payload => {
   // console.log('in setConfig actions with', payload)
   return {

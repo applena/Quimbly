@@ -7,11 +7,11 @@ const updateConfig = async ({ calendars, setHiddenCalendars, setVisibleCalendars
     return a.summary > b.summary ? 1 : -1;
   });
 
-  // ensures the myQ calendar exists
-  const { config, myQCalendar } = await loadConfig(calendars);
+  // ensures the quimbly calendar exists
+  const { config, quimblyCalendar } = await loadConfig(calendars);
 
   // put the hidden calendars in state
-  const hiddenCalendars = JSON.parse(myQCalendar.description);
+  const hiddenCalendars = JSON.parse(quimblyCalendar.description);
   setHiddenCalendars(hiddenCalendars.hiddenCalendars);
 
   const visCal = calendars.filter(cal => !hiddenCalendars.hiddenCalendars.includes(cal.summary));
@@ -19,9 +19,9 @@ const updateConfig = async ({ calendars, setHiddenCalendars, setVisibleCalendars
 
   // set the config in redux to the config
   props.setConfig(config);
-  props.setMyQCalendar(myQCalendar);
-  if (!calendars.find(c => c.summary === 'MyQ')) {
-    props.setCalendars([...calendars, myQCalendar]);
+  props.setQuimblyCalendar(quimblyCalendar);
+  if (!calendars.find(c => c.summary === 'Quimbly')) {
+    props.setCalendars([...calendars, quimblyCalendar]);
   } else {
     props.setCalendars(calendars);
   }

@@ -25,9 +25,9 @@ const reducer = (state = reduxData, action) => {
       // console.log('reducer: SETEVENTS', payload)
       return { ...state, events: payload }
 
-    case 'SETMYQCALENDAR':
-      // console.log('SETMYQCALENDAR:', payload)
-      return { ...state, myQCalendar: payload };
+    case 'SETQUIMBLYCALENDAR':
+      // console.log('SETQUIMBLYCALENDAR:', payload)
+      return { ...state, QuimblyCalendar: payload };
 
     // case 'TOGGLEHIDECALENDAR':
     //   // if the payload is in the hiddenCalendars, remove it - otherwise add it

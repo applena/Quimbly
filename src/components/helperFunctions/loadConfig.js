@@ -3,36 +3,36 @@ import saveConfig from './saveConfig';
 import createConfig from './createConfig';
 
 async function loadConfig(calendars) {
-  // finding the MyQ calendar if it exists
-  let myQCalendar = calendars.find(calendar => {
-    return calendar.summary === 'MyQ';
+  // finding the Quimbly calendar if it exists
+  let quimblyCalendar = calendars.find(calendar => {
+    return calendar.summary === 'Quimbly';
   });
 
-  console.log('found myQCal in loadConfig', { myQCalendar })
+  console.log('found quimblyCal in loadConfig', { quimblyCalendar })
 
-  // console.log({myQCalendar})
+  // console.log({quimblyCalendar})
 
-  if (!myQCalendar) {
+  if (!quimblyCalendar) {
 
-    // if myQ calendar doesn't exist, create MyQ calendar
-    console.log('no myQ calendar - creating one')
-    myQCalendar = await createConfig();
+    // if Quimbly calendar doesn't exist, create Quimbly calendar
+    console.log('no quimbly calendar - creating one')
+    quimblyCalendar = await createConfig();
   }
 
   let config;
 
   try {
-    config = JSON.parse(myQCalendar.description);
+    config = JSON.parse(quimblyCalendar.description);
   } catch (err) {
     console.error('ERROR', err);
   }
 
   if (!config) {
     config = data.config;
-    await saveConfig(config, myQCalendar.id);
+    await saveConfig(config, quimblyCalendar.id);
   }
 
-  return { config, myQCalendar };
+  return { config, quimblyCalendar };
 
 }
 

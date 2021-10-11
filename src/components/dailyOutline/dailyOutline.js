@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn } from '../../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn } from '../../store/actions';
 import NowLine from './nowLine';
 import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
 import config from '../../config';
+import AddEvent from '../addEvent';
 
 import './dailyOutline.scss';
 /* global gapi */
@@ -29,6 +30,8 @@ function DailyOutline(props) {
   const generateEventLocations = (events) => {
     const maxTime = new Date().getTime() + config.MAMIMUM_EVENT_TIME;
     const minTime = new Date().getTime() + config.MINIMUM_EVENT_TIME;
+
+    console.log('Step 1: events', { events })
 
     // get today's events
     const todaysEvents = events.filter(event => {
@@ -85,8 +88,6 @@ function DailyOutline(props) {
 
       allEventLocations[event.id] = newEvent;
 
-      // console.log({ allEventLocations });
-
       Object.values(allEventLocations).forEach((e, i) => {
         if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels < e.endingPixels) && i !== idx) {
           newEvent.position = e.position + 1;
@@ -107,6 +108,18 @@ function DailyOutline(props) {
     // console.log({ eventLocations, todaysEvents })
     setEventLocations(eventLocations);
   };
+
+  const updateEvents = (event) => {
+    console.log('new event from Quimbly:', { event }, props.events);
+
+    generateEventLocations([...props.events, {
+      calendar: 'Quimbly',
+      event: event.summary,
+      endTime: event.end.dateTime,
+      startTime: event.start.dateTime,
+      description: event.description
+    }])
+  }
 
   useEffect(() => {
     setNowLineLocation(config.OUTLINE_OFFSET + 120 + minutes);
@@ -146,6 +159,9 @@ function DailyOutline(props) {
 
   return (
     <>
+      <AddEvent
+        updateEvents={updateEvents}
+      />
       <div style={dateContainer}>
         <div style={dateStyle} id="date">{new Date().getDate()}</div>
       </div>
@@ -179,7 +195,7 @@ function DailyOutline(props) {
   )
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setMyQCalendar, setEvents, isLoggedIn };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn };
 
 const mapStateToProps = state => {
   return {
@@ -187,7 +203,7 @@ const mapStateToProps = state => {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    myQCalendar: state.reduxData.myQCalendar,
+    quimblyCalendar: state.reduxData.quimblyCalendar,
     events: state.reduxData.events
   }
 };

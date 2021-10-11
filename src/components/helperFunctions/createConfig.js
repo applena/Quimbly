@@ -4,7 +4,7 @@ import data from '../../store/data';
 
 async function createConfig() {
   const response = await gapi.client.calendar.calendars.insert({
-    summary: 'MyQ',
+    summary: 'Quimbly',
     description: JSON.stringify(data.config)
   })
 

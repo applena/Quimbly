@@ -7,7 +7,7 @@ const reduxData = {
   config: {
     hiddenCalendars: []
   },
-  myQCalendar: {}
+  quimblyCalendar: {}
 };
 
 window.reduxData = reduxData;
