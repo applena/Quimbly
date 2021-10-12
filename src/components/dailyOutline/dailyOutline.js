@@ -110,7 +110,7 @@ function DailyOutline(props) {
   };
 
   const updateEvents = (event) => {
-    console.log('new event from Quimbly:', { event }, props.events);
+    // console.log('new event from Quimbly:', { event }, props.events);
 
     generateEventLocations([...props.events, {
       calendar: 'Quimbly',

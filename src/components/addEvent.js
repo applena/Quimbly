@@ -50,7 +50,10 @@ function AddEvent(props) {
   const [eventEndTime, setEventEndTime] = useState(oneHourString);
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState(false);
-  const [recurringEndDate, setRecurringEndDate] = useState(today)
+  const [recurringEndDate, setRecurringEndDate] = useState(today);
+  const [checked, setChecked] = useState(true);
+  const [duration, setDuration] = useState(1);
+
 
   // console.log({ attendeeEmail })
 
@@ -133,6 +136,12 @@ function AddEvent(props) {
                 <TextField onChange={(e) => setEventName(e.target.value)} id="event-name" label="Event Name" />
                 <TextField onChange={(e) => setEventLocation(e.target.value)} id="event-location" label="Event Location" />
                 <TextField onChange={(e) => setDescription(e.target.value)} id="event-description" label="Event Description" />
+                <TextField onChange={(e) => setDuration(e.target.value)} id="event-description" label="Event Duration (use decimals for partials hours)" />
+
+                <FormControlLabel
+                  control={<Checkbox checked={checked} onChange={(e) => setChecked(!checked)} />}
+                  label="Find First Available Time"
+                />
                 <TextField
                   onChange={(e) => setEventDate(e.target.value)}
                   type="date"
