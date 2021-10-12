@@ -79,11 +79,11 @@ function AddEvent(props) {
       'description': description,
       'start': {
         'dateTime': startDateTime,//'2015-05-28T09:00:00-07:00', 2021-07-10T21:20:24.453Z
-        'timeZone': props.quimblyCalendar.timeZone// default Quimbly time zone
+        'timeZone': props.QuimblyCalendar.timeZone// default Quimbly time zone
       },
       'end': {
         'dateTime': endDateTime,//'2015-05-28T17:00:00-07:00', TODO - add an hour
-        'timeZone': props.quimblyCalendar.timeZone
+        'timeZone': props.QuimblyCalendar.timeZone
       },
       'attendees': attendeeEmail,
       // 'reminders': {
@@ -104,7 +104,7 @@ function AddEvent(props) {
     console.log({ event })
 
     const request = gapi.client.calendar.events.insert({
-      'calendarId': props.quimblyCalendar.id,
+      'calendarId': props.QuimblyCalendar.id,
       'resource': event
     });
 
@@ -202,7 +202,7 @@ const mapStateToProps = state => {
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    quimblyCalendar: state.reduxData.quimblyCalendar
+    QuimblyCalendar: state.reduxData.QuimblyCalendar
   })
 };
 
