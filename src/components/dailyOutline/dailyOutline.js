@@ -117,7 +117,8 @@ function DailyOutline(props) {
       event: event.summary,
       endTime: event.end.dateTime,
       startTime: event.start.dateTime,
-      description: event.description
+      description: event.description,
+      color: '#333'
     }])
   }
 
