@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { connect } from 'react-redux';
 import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar } from '../store/actions';
 import moment from 'moment';
+import findFirstAvailable from './helperFunctions/findFirstAvailable';
 
 import Modal from "@material-ui/core/Modal";
 import Card from '@material-ui/core/Card';
@@ -53,7 +54,7 @@ function AddEvent(props) {
   const [recurringEndDate, setRecurringEndDate] = useState(today);
   const [firstAvailable, setFirstAvailable] = useState(true);
   const [hourDuration, setHourDuration] = useState(0);
-  const [minuteDuration, setMinuteDuration] = useState(10);
+  const [minuteDuration, setMinuteDuration] = useState(.16);
 
 
   // console.log({ attendeeEmail })
@@ -65,6 +66,9 @@ function AddEvent(props) {
     setDisplayRecurringEvent(false);
     setRecurringFrequency(false);
     setAttendeeEmail([]);
+    setHourDuration(0);
+    setMinuteDuration(.16);
+    setFirstAvailable(true);
   }
   const handleEndDate = (e) => {
     const formattedDate = new Date(e.target.value).toISOString().replace(/[-:\.]/g, '');
@@ -75,6 +79,11 @@ function AddEvent(props) {
   }
 
   const saveEvent = () => {
+
+    if (firstAvailable) {
+      console.log('firstAvailable was true', hourDuration, minuteDuration, props.events);
+      findFirstAvailable(hourDuration, minuteDuration, props.events);
+    }
 
     event = {
       ...event,
@@ -139,58 +148,63 @@ function AddEvent(props) {
                 <TextField onChange={(e) => setDescription(e.target.value)} id="event-description" label="Event Description" />
 
                 {firstAvailable &&
-                  <FormControl fullWidth>
-                    <InputLabel id="event-duration">Event Duration</InputLabel>
-                    <Select
-                      value={hourDuration}
-                      label="Hour"
-                      onChange={(e) => setHourDuration(e.target.value)}
-                    >
-                      <MenuItem value={0}>0 Hours</MenuItem>
-                      <MenuItem value={1}>1 Hour</MenuItem>
-                      <MenuItem value={2}>2 Hours</MenuItem>
-                      <MenuItem value={3}>3 Hours</MenuItem>
-                      <MenuItem value={4}>4 Hours</MenuItem>
-                      <MenuItem value={5}>5 Hours</MenuItem>
-                      <MenuItem value={6}>6 Hours</MenuItem>
-                      <MenuItem value={7}>7 Hours</MenuItem>
-                      <MenuItem value={8}>8 Hours</MenuItem>
-                      <MenuItem value={9}>9 Hours</MenuItem>
-                      <MenuItem value={10}>10 Hours</MenuItem>
-                      <MenuItem value={11}>11 Hours</MenuItem>
-                      <MenuItem value={12}>12 Hours</MenuItem>
-                      <MenuItem value={13}>13 Hours</MenuItem>
-                      <MenuItem value={14}>14 Hours</MenuItem>
-                      <MenuItem value={15}>15 Hours</MenuItem>
-                      <MenuItem value={16}>16 Hours</MenuItem>
-                      <MenuItem value={17}>17 Hours</MenuItem>
-                      <MenuItem value={18}>18 Hours</MenuItem>
-                      <MenuItem value={19}>19 Hours</MenuItem>
-                      <MenuItem value={20}>20 Hours</MenuItem>
-                      <MenuItem value={21}>21 Hours</MenuItem>
-                      <MenuItem value={22}>22 Hours</MenuItem>
-                      <MenuItem value={23}>23 Hours</MenuItem>
-                    </Select>
+                  <>
+                    <FormControl fullWidth>
+                      <InputLabel id="event-duration">How Many Hours Is Your Event</InputLabel>
+                      <Select
+                        value={hourDuration}
+                        label="Hour"
+                        onChange={(e) => setHourDuration(e.target.value)}
+                      >
+                        <MenuItem value={0}>0 Hours</MenuItem>
+                        <MenuItem value={1}>1 Hour</MenuItem>
+                        <MenuItem value={2}>2 Hours</MenuItem>
+                        <MenuItem value={3}>3 Hours</MenuItem>
+                        <MenuItem value={4}>4 Hours</MenuItem>
+                        <MenuItem value={5}>5 Hours</MenuItem>
+                        <MenuItem value={6}>6 Hours</MenuItem>
+                        <MenuItem value={7}>7 Hours</MenuItem>
+                        <MenuItem value={8}>8 Hours</MenuItem>
+                        <MenuItem value={9}>9 Hours</MenuItem>
+                        <MenuItem value={10}>10 Hours</MenuItem>
+                        <MenuItem value={11}>11 Hours</MenuItem>
+                        <MenuItem value={12}>12 Hours</MenuItem>
+                        <MenuItem value={13}>13 Hours</MenuItem>
+                        <MenuItem value={14}>14 Hours</MenuItem>
+                        <MenuItem value={15}>15 Hours</MenuItem>
+                        <MenuItem value={16}>16 Hours</MenuItem>
+                        <MenuItem value={17}>17 Hours</MenuItem>
+                        <MenuItem value={18}>18 Hours</MenuItem>
+                        <MenuItem value={19}>19 Hours</MenuItem>
+                        <MenuItem value={20}>20 Hours</MenuItem>
+                        <MenuItem value={21}>21 Hours</MenuItem>
+                        <MenuItem value={22}>22 Hours</MenuItem>
+                        <MenuItem value={23}>23 Hours</MenuItem>
+                      </Select>
+                    </FormControl>
 
-                    <Select
-                      value={minuteDuration}
-                      label="Minutes"
-                      onChange={(e) => setMinuteDuration(e.target.value)}
-                    >
-                      <MenuItem value={0}>0</MenuItem>
-                      <MenuItem value={5}>5 Minutes</MenuItem>
-                      <MenuItem value={10}>10 Minutes</MenuItem>
-                      <MenuItem value={15}>15 Minutes</MenuItem>
-                      <MenuItem value={20}>20 Minutes</MenuItem>
-                      <MenuItem value={25}>25 Minutes</MenuItem>
-                      <MenuItem value={30}>30 Minutes</MenuItem>
-                      <MenuItem value={35}>35 Minutes</MenuItem>
-                      <MenuItem value={40}>40 Minutes</MenuItem>
-                      <MenuItem value={45}>45 Minutes</MenuItem>
-                      <MenuItem value={50}>50 Minutes</MenuItem>
-                      <MenuItem value={55}>55 Minutes</MenuItem>
-                    </Select>
-                  </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel id="event-duration">How Many Minutes Is Your Event</InputLabel>
+                      <Select
+                        value={minuteDuration}
+                        label="Minutes"
+                        onChange={(e) => setMinuteDuration(e.target.value)}
+                      >
+                        <MenuItem value={0}>0</MenuItem>
+                        <MenuItem value={.083}>5 Minutes</MenuItem>
+                        <MenuItem value={.16}>10 Minutes</MenuItem>
+                        <MenuItem value={.25}>15 Minutes</MenuItem>
+                        <MenuItem value={.33}>20 Minutes</MenuItem>
+                        <MenuItem value={.417}>25 Minutes</MenuItem>
+                        <MenuItem value={.5}>30 Minutes</MenuItem>
+                        <MenuItem value={.583}>35 Minutes</MenuItem>
+                        <MenuItem value={.67}>40 Minutes</MenuItem>
+                        <MenuItem value={.75}>45 Minutes</MenuItem>
+                        <MenuItem value={.83}>50 Minutes</MenuItem>
+                        <MenuItem value={.917}>55 Minutes</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </>
                 }
                 <FormControlLabel
                   control={<Checkbox checked={firstAvailable} onChange={(e) => setFirstAvailable(!firstAvailable)} />}
@@ -270,7 +284,8 @@ const mapStateToProps = state => {
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    QuimblyCalendar: state.reduxData.QuimblyCalendar
+    QuimblyCalendar: state.reduxData.QuimblyCalendar,
+    events: state.reduxData.events
   })
 };
 
