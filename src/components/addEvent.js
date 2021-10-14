@@ -51,8 +51,9 @@ function AddEvent(props) {
   const [displayRecurringEvent, setDisplayRecurringEvent] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState(false);
   const [recurringEndDate, setRecurringEndDate] = useState(today);
-  const [checked, setChecked] = useState(true);
-  const [duration, setDuration] = useState(1);
+  const [firstAvailable, setFirstAvailable] = useState(true);
+  const [hourDuration, setHourDuration] = useState(0);
+  const [minuteDuration, setMinuteDuration] = useState(10);
 
 
   // console.log({ attendeeEmail })
@@ -136,30 +137,88 @@ function AddEvent(props) {
                 <TextField onChange={(e) => setEventName(e.target.value)} id="event-name" label="Event Name" />
                 <TextField onChange={(e) => setEventLocation(e.target.value)} id="event-location" label="Event Location" />
                 <TextField onChange={(e) => setDescription(e.target.value)} id="event-description" label="Event Description" />
-                <TextField onChange={(e) => setDuration(e.target.value)} id="event-description" label="Event Duration (use decimals for partials hours)" />
 
+                {firstAvailable &&
+                  <FormControl fullWidth>
+                    <InputLabel id="event-duration">Event Duration</InputLabel>
+                    <Select
+                      value={hourDuration}
+                      label="Hour"
+                      onChange={(e) => setHourDuration(e.target.value)}
+                    >
+                      <MenuItem value={0}>0 Hours</MenuItem>
+                      <MenuItem value={1}>1 Hour</MenuItem>
+                      <MenuItem value={2}>2 Hours</MenuItem>
+                      <MenuItem value={3}>3 Hours</MenuItem>
+                      <MenuItem value={4}>4 Hours</MenuItem>
+                      <MenuItem value={5}>5 Hours</MenuItem>
+                      <MenuItem value={6}>6 Hours</MenuItem>
+                      <MenuItem value={7}>7 Hours</MenuItem>
+                      <MenuItem value={8}>8 Hours</MenuItem>
+                      <MenuItem value={9}>9 Hours</MenuItem>
+                      <MenuItem value={10}>10 Hours</MenuItem>
+                      <MenuItem value={11}>11 Hours</MenuItem>
+                      <MenuItem value={12}>12 Hours</MenuItem>
+                      <MenuItem value={13}>13 Hours</MenuItem>
+                      <MenuItem value={14}>14 Hours</MenuItem>
+                      <MenuItem value={15}>15 Hours</MenuItem>
+                      <MenuItem value={16}>16 Hours</MenuItem>
+                      <MenuItem value={17}>17 Hours</MenuItem>
+                      <MenuItem value={18}>18 Hours</MenuItem>
+                      <MenuItem value={19}>19 Hours</MenuItem>
+                      <MenuItem value={20}>20 Hours</MenuItem>
+                      <MenuItem value={21}>21 Hours</MenuItem>
+                      <MenuItem value={22}>22 Hours</MenuItem>
+                      <MenuItem value={23}>23 Hours</MenuItem>
+                    </Select>
+
+                    <Select
+                      value={minuteDuration}
+                      label="Minutes"
+                      onChange={(e) => setMinuteDuration(e.target.value)}
+                    >
+                      <MenuItem value={0}>0</MenuItem>
+                      <MenuItem value={5}>5 Minutes</MenuItem>
+                      <MenuItem value={10}>10 Minutes</MenuItem>
+                      <MenuItem value={15}>15 Minutes</MenuItem>
+                      <MenuItem value={20}>20 Minutes</MenuItem>
+                      <MenuItem value={25}>25 Minutes</MenuItem>
+                      <MenuItem value={30}>30 Minutes</MenuItem>
+                      <MenuItem value={35}>35 Minutes</MenuItem>
+                      <MenuItem value={40}>40 Minutes</MenuItem>
+                      <MenuItem value={45}>45 Minutes</MenuItem>
+                      <MenuItem value={50}>50 Minutes</MenuItem>
+                      <MenuItem value={55}>55 Minutes</MenuItem>
+                    </Select>
+                  </FormControl>
+                }
                 <FormControlLabel
-                  control={<Checkbox checked={checked} onChange={(e) => setChecked(!checked)} />}
+                  control={<Checkbox checked={firstAvailable} onChange={(e) => setFirstAvailable(!firstAvailable)} />}
                   label="Find First Available Time"
                 />
-                <TextField
-                  onChange={(e) => setEventDate(e.target.value)}
-                  type="date"
-                  defaultValue={today}
-                  id="event-date"
-                  label="Event Date" />
-                <TextField
-                  onChange={(e) => setEventStartTime(e.target.value)}
-                  label="Event Start Time"
-                  type="time"
-                  defaultValue={nowString}
-                  id="event-start-time" />
-                <TextField
-                  onChange={(e) => setEventEndTime(e.target.value)}
-                  label="Event End Time"
-                  type="time"
-                  defaultValue={oneHourString}
-                  id="event-end-time" />
+
+                {!firstAvailable &&
+                  <>
+                    <TextField
+                      onChange={(e) => setEventDate(e.target.value)}
+                      type="date"
+                      defaultValue={today}
+                      id="event-date"
+                      label="Event Date" />
+                    <TextField
+                      onChange={(e) => setEventStartTime(e.target.value)}
+                      label="Event Start Time"
+                      type="time"
+                      defaultValue={nowString}
+                      id="event-start-time" />
+                    <TextField
+                      onChange={(e) => setEventEndTime(e.target.value)}
+                      label="Event End Time"
+                      type="time"
+                      defaultValue={oneHourString}
+                      id="event-end-time" />
+                  </>
+                }
                 {/* <TextField
                 onChange={(e) => setAttendeeEmail([...attendeeEmail, { email: e.target.value }])}
                 label="Email of Attendee"
