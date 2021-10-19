@@ -6,7 +6,7 @@ import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
 import config from '../../config';
 import AddEvent from '../addEvent';
-import generateFreeTime from '../helperFunctions/generateFreeTime';
+import generateSchedule from '../helperFunctions/generateSchedule';
 
 import './dailyOutline.scss';
 /* global gapi */
@@ -63,6 +63,7 @@ function DailyOutline(props) {
 
       allEventLocations[event.id] = newEvent;
 
+      // STEP 2: move events that are at the same time over to the right so they don't overlap
       Object.values(allEventLocations).forEach((e, i) => {
         if ((e.startingPixels <= newEvent.startingPixels && newEvent.startingPixels < e.endingPixels) && i !== idx) {
           newEvent.position = e.position + 1;
@@ -79,14 +80,14 @@ function DailyOutline(props) {
         newEvent.left = '50px';
         newEvent.zIndex = 5;
         newEvent.height = '20px';
-        console.log('checking for an all day event', { event, newEvent })
+        // console.log('checking for an all day event', { event, newEvent })
 
       }
 
       return (newEvent)
     })
 
-    // get today's events
+    // STEP 3: get just the events that are going to render on page for today
     const todaysEvents = eventLocations.filter(event => {
       if (!event) return false;
 
@@ -105,7 +106,8 @@ function DailyOutline(props) {
 
     });
 
-    generateFreeTime(eventLocations);
+    // STEP 4: determine when the free-time blocks are
+    generateSchedule(eventLocations);
 
     console.log({ eventLocations, todaysEvents })
 
