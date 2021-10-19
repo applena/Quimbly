@@ -6,6 +6,7 @@ import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
 import config from '../../config';
 import AddEvent from '../addEvent';
+import generateFreeTime from '../helperFunctions/generateFreeTime';
 
 import './dailyOutline.scss';
 /* global gapi */
@@ -88,6 +89,8 @@ function DailyOutline(props) {
     // get today's events
     const todaysEvents = eventLocations.filter(event => {
       if (!event) return false;
+
+      // get the all day events for today
       const today = new Date().toISOString().split('T')[0];
       if (event.allDay) {
         return event.startTime === today;
@@ -101,6 +104,8 @@ function DailyOutline(props) {
       }
 
     });
+
+    generateFreeTime(eventLocations);
 
     console.log({ eventLocations, todaysEvents })
 
