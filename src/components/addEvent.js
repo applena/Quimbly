@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar } from '../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setSchedule } from '../store/actions';
 import moment from 'moment';
 import findFirstAvailable from './helperFunctions/findFirstAvailable';
+import generateSchedule from './helperFunctions/generateSchedule';
 
 import Modal from "@material-ui/core/Modal";
 import Card from '@material-ui/core/Card';
@@ -106,12 +107,10 @@ function AddEvent(props) {
     if (firstAvailable) {
       const duration = hourDuration + minuteDuration;
       const firstAvailableBlock = findFirstAvailable(duration, props.schedule);
-      console.log({ firstAvailableBlock });
       event.start.dateTime = firstAvailableBlock.startTime;
       const endMinutes = new Date(firstAvailableBlock.startTime).getMinutes() + duration;
       const newEndTimeString = `${firstAvailableBlock.startTime.split(':')[0]}:${endMinutes}:${firstAvailableBlock.startTime.split(':')[2]}:00`;
       event.end.dateTime = newEndTimeString;
-      console.log({ endMinutes, newEndTimeString }, firstAvailableBlock.startTime)
     }
 
     if (recurringFrequency) {
@@ -131,7 +130,12 @@ function AddEvent(props) {
       console.log('Event created: ' + event.htmlLink);
     });
 
-    props.updateEvents(event)
+    // update Redux with the new schedule
+    const updatedSchedule = generateSchedule(props.events);
+    props.setSchedule(updatedSchedule);
+
+    // update state
+    props.updateEvents(event);
 
     handleClose();
   }
@@ -283,7 +287,7 @@ function AddEvent(props) {
   )
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setSchedule };
 
 const mapStateToProps = state => {
   // console.log('ADD EVENT: REDUX', state)
