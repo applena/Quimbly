@@ -70,6 +70,14 @@ export const isLoggedIn = payload => {
   };
 };
 
+export const setSchedule = payload => {
+  // console.log('in SETSCHEDULE actions with', payload)
+  return {
+    type: 'SETSCHEDULE',
+    payload,
+  };
+};
+
 // export const stop = payload => {
 //   return {
 //     type: 'STOP',

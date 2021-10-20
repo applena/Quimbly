@@ -11,10 +11,11 @@ function EventLocations(props) {
           top: event.startingPixels,
           height: event.height,
           color: 'white',
-          padding: '1em',
+          fontSize: '.6em',
           width: event.width,
           left: event.left,
-          textAlign: 'center',
+          textAlign: 'left',
+          paddingLeft: '10px',
           border: '1px solid gray',
           zIndex: event.zIndex
         }

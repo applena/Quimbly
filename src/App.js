@@ -112,7 +112,7 @@ const mapStateToProps = state => {
     loggedIn: state.reduxData.loggedIn,
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
-    quimblyCalendar: state.reduxData.quimblyCalendar,
+    QuimblyCalendar: state.reduxData.QuimblyCalendar,
     events: state.reduxData.events
   }
 };

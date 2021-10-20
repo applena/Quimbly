@@ -1,4 +1,3 @@
-// import config from '../../config';
 
 const getDurationMinutes = (end, start) => (new Date(end) - new Date(start)) / 1000 / 60;
 // generates a flat view of the schedule where overlapping events are joined into busy time
@@ -15,7 +14,7 @@ function generateSchedule(events) {
     // if the first event is after our current time, add free time buffer
     const lastItem = schedule.length ? schedule[schedule.length - 1] : false;
 
-    console.log({ lastItem, e, currentTime });
+    // console.log({ lastItem, e, currentTime });
 
     if (!lastItem && new Date(e.startTime).getTime() > currentTime) {
       schedule.push({
@@ -58,7 +57,7 @@ function generateSchedule(events) {
       titles: [e.event]
     });
   });
-  console.log({ schedule })
+  // console.log({ schedule })
   return schedule;
 }
 

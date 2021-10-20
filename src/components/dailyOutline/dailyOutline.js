@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn } from '../../store/actions';
+import { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn, setSchedule } from '../../store/actions';
 import NowLine from './nowLine';
 import getUpcomingEvents from '../../lib/getUpcomingEvents';
 import EventLocations from './events/eventLocations';
@@ -107,12 +107,14 @@ function DailyOutline(props) {
     });
 
     // STEP 4: determine when the free-time blocks are
-    generateSchedule(eventLocations);
+    const schedule = generateSchedule(eventLocations);
 
     console.log({ eventLocations, todaysEvents })
 
     // save all events in REDUX
     props.setEvents(eventLocations);
+    props.setSchedule(schedule);
+
     // save daily events in state
     setEventLocations(todaysEvents);
   };
@@ -204,7 +206,7 @@ function DailyOutline(props) {
   )
 }
 
-const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn };
+const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar, setEvents, isLoggedIn, setSchedule };
 
 const mapStateToProps = state => {
   return {

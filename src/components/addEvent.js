@@ -54,7 +54,7 @@ function AddEvent(props) {
   const [recurringEndDate, setRecurringEndDate] = useState(today);
   const [firstAvailable, setFirstAvailable] = useState(true);
   const [hourDuration, setHourDuration] = useState(0);
-  const [minuteDuration, setMinuteDuration] = useState(.16);
+  const [minuteDuration, setMinuteDuration] = useState(10);
 
 
   // console.log({ attendeeEmail })
@@ -67,7 +67,7 @@ function AddEvent(props) {
     setRecurringFrequency(false);
     setAttendeeEmail([]);
     setHourDuration(0);
-    setMinuteDuration(.16);
+    setMinuteDuration(10);
     setFirstAvailable(true);
   }
   const handleEndDate = (e) => {
@@ -79,11 +79,6 @@ function AddEvent(props) {
   }
 
   const saveEvent = () => {
-
-    if (firstAvailable) {
-      console.log('firstAvailable was true', hourDuration, minuteDuration, props.events);
-      findFirstAvailable(hourDuration, minuteDuration, props.events);
-    }
 
     event = {
       ...event,
@@ -107,6 +102,17 @@ function AddEvent(props) {
       //   ]
       // }
     };
+
+    if (firstAvailable) {
+      const duration = hourDuration + minuteDuration;
+      const firstAvailableBlock = findFirstAvailable(duration, props.schedule);
+      console.log({ firstAvailableBlock });
+      event.start.dateTime = firstAvailableBlock.startTime;
+      const endMinutes = new Date(firstAvailableBlock.startTime).getMinutes() + duration;
+      const newEndTimeString = `${firstAvailableBlock.startTime.split(':')[0]}:${endMinutes}:${firstAvailableBlock.startTime.split(':')[2]}:00`;
+      event.end.dateTime = newEndTimeString;
+      console.log({ endMinutes, newEndTimeString }, firstAvailableBlock.startTime)
+    }
 
     if (recurringFrequency) {
       event.recurrence = [
@@ -157,29 +163,29 @@ function AddEvent(props) {
                         onChange={(e) => setHourDuration(e.target.value)}
                       >
                         <MenuItem value={0}>0 Hours</MenuItem>
-                        <MenuItem value={1}>1 Hour</MenuItem>
-                        <MenuItem value={2}>2 Hours</MenuItem>
-                        <MenuItem value={3}>3 Hours</MenuItem>
-                        <MenuItem value={4}>4 Hours</MenuItem>
-                        <MenuItem value={5}>5 Hours</MenuItem>
-                        <MenuItem value={6}>6 Hours</MenuItem>
-                        <MenuItem value={7}>7 Hours</MenuItem>
-                        <MenuItem value={8}>8 Hours</MenuItem>
-                        <MenuItem value={9}>9 Hours</MenuItem>
-                        <MenuItem value={10}>10 Hours</MenuItem>
-                        <MenuItem value={11}>11 Hours</MenuItem>
-                        <MenuItem value={12}>12 Hours</MenuItem>
-                        <MenuItem value={13}>13 Hours</MenuItem>
-                        <MenuItem value={14}>14 Hours</MenuItem>
-                        <MenuItem value={15}>15 Hours</MenuItem>
-                        <MenuItem value={16}>16 Hours</MenuItem>
-                        <MenuItem value={17}>17 Hours</MenuItem>
-                        <MenuItem value={18}>18 Hours</MenuItem>
-                        <MenuItem value={19}>19 Hours</MenuItem>
-                        <MenuItem value={20}>20 Hours</MenuItem>
-                        <MenuItem value={21}>21 Hours</MenuItem>
-                        <MenuItem value={22}>22 Hours</MenuItem>
-                        <MenuItem value={23}>23 Hours</MenuItem>
+                        <MenuItem value={60}>1 Hour</MenuItem>
+                        <MenuItem value={120}>2 Hours</MenuItem>
+                        <MenuItem value={180}>3 Hours</MenuItem>
+                        <MenuItem value={240}>4 Hours</MenuItem>
+                        <MenuItem value={300}>5 Hours</MenuItem>
+                        <MenuItem value={360}>6 Hours</MenuItem>
+                        <MenuItem value={420}>7 Hours</MenuItem>
+                        <MenuItem value={480}>8 Hours</MenuItem>
+                        <MenuItem value={540}>9 Hours</MenuItem>
+                        <MenuItem value={600}>10 Hours</MenuItem>
+                        <MenuItem value={660}>11 Hours</MenuItem>
+                        <MenuItem value={720}>12 Hours</MenuItem>
+                        <MenuItem value={780}>13 Hours</MenuItem>
+                        <MenuItem value={840}>14 Hours</MenuItem>
+                        <MenuItem value={900}>15 Hours</MenuItem>
+                        <MenuItem value={960}>16 Hours</MenuItem>
+                        <MenuItem value={1020}>17 Hours</MenuItem>
+                        <MenuItem value={1080}>18 Hours</MenuItem>
+                        <MenuItem value={1140}>19 Hours</MenuItem>
+                        <MenuItem value={1200}>20 Hours</MenuItem>
+                        <MenuItem value={1260}>21 Hours</MenuItem>
+                        <MenuItem value={1320}>22 Hours</MenuItem>
+                        <MenuItem value={1380}>23 Hours</MenuItem>
                       </Select>
                     </FormControl>
 
@@ -191,17 +197,17 @@ function AddEvent(props) {
                         onChange={(e) => setMinuteDuration(e.target.value)}
                       >
                         <MenuItem value={0}>0</MenuItem>
-                        <MenuItem value={.083}>5 Minutes</MenuItem>
-                        <MenuItem value={.16}>10 Minutes</MenuItem>
-                        <MenuItem value={.25}>15 Minutes</MenuItem>
-                        <MenuItem value={.33}>20 Minutes</MenuItem>
-                        <MenuItem value={.417}>25 Minutes</MenuItem>
-                        <MenuItem value={.5}>30 Minutes</MenuItem>
-                        <MenuItem value={.583}>35 Minutes</MenuItem>
-                        <MenuItem value={.67}>40 Minutes</MenuItem>
-                        <MenuItem value={.75}>45 Minutes</MenuItem>
-                        <MenuItem value={.83}>50 Minutes</MenuItem>
-                        <MenuItem value={.917}>55 Minutes</MenuItem>
+                        <MenuItem value={5}>5 Minutes</MenuItem>
+                        <MenuItem value={10}>10 Minutes</MenuItem>
+                        <MenuItem value={15}>15 Minutes</MenuItem>
+                        <MenuItem value={20}>20 Minutes</MenuItem>
+                        <MenuItem value={25}>25 Minutes</MenuItem>
+                        <MenuItem value={30}>30 Minutes</MenuItem>
+                        <MenuItem value={35}>35 Minutes</MenuItem>
+                        <MenuItem value={40}>40 Minutes</MenuItem>
+                        <MenuItem value={45}>45 Minutes</MenuItem>
+                        <MenuItem value={50}>50 Minutes</MenuItem>
+                        <MenuItem value={55}>55 Minutes</MenuItem>
                       </Select>
                     </FormControl>
                   </>
@@ -280,12 +286,13 @@ function AddEvent(props) {
 const mapDispatchToProps = { setCalendars, toggleHideCalendar, setConfig, setQuimblyCalendar };
 
 const mapStateToProps = state => {
-  console.log('ADD EVENT: REDUX', state)
+  // console.log('ADD EVENT: REDUX', state)
   return ({
     calendars: state.reduxData.calendars,
     config: state.reduxData.config,
     QuimblyCalendar: state.reduxData.QuimblyCalendar,
-    events: state.reduxData.events
+    events: state.reduxData.events,
+    schedule: state.reduxData.schedule
   })
 };
 
