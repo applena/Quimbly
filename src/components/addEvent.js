@@ -107,7 +107,7 @@ function AddEvent(props) {
     if (firstAvailable) {
       const duration = hourDuration + minuteDuration;
       const firstAvailableBlock = findFirstAvailable(duration, props.schedule);
-      console.log({ firstAvailableBlock, duration, hourDuration, minuteDuration })
+      // console.log({ firstAvailableBlock, duration, hourDuration, minuteDuration })
 
       event.start.dateTime = firstAvailableBlock.startTime;
       let endMinutes = new Date(firstAvailableBlock.startTime).getMinutes() + duration;
@@ -122,7 +122,11 @@ function AddEvent(props) {
 
       const newEndTimeString = `${firstAvailableBlock.startTime.split('T')[0]}T${endHours}:${endMinutes}:${firstAvailableBlock.startTime.split(':')[2]}:00`;
       event.end.dateTime = newEndTimeString;
-      console.log('startTime:', firstAvailableBlock.startTime, { endMinutes, endHours, newEndTimeString })
+
+      // update Redux with the new schedule
+      const updatedSchedule = generateSchedule(props.events);
+      props.setSchedule(updatedSchedule);
+      // console.log('startTime:', firstAvailableBlock.startTime, { endMinutes, endHours, newEndTimeString })
     }
 
     if (recurringFrequency) {
@@ -141,10 +145,6 @@ function AddEvent(props) {
     request.execute(function (event) {
       console.log('Event created: ' + event.htmlLink);
     });
-
-    // update Redux with the new schedule
-    const updatedSchedule = generateSchedule(props.events);
-    props.setSchedule(updatedSchedule);
 
     // update state
     props.updateEvents(event);
