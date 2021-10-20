@@ -107,10 +107,22 @@ function AddEvent(props) {
     if (firstAvailable) {
       const duration = hourDuration + minuteDuration;
       const firstAvailableBlock = findFirstAvailable(duration, props.schedule);
+      console.log({ firstAvailableBlock, duration, hourDuration, minuteDuration })
+
       event.start.dateTime = firstAvailableBlock.startTime;
-      const endMinutes = new Date(firstAvailableBlock.startTime).getMinutes() + duration;
-      const newEndTimeString = `${firstAvailableBlock.startTime.split(':')[0]}:${endMinutes}:${firstAvailableBlock.startTime.split(':')[2]}:00`;
+      let endMinutes = new Date(firstAvailableBlock.startTime).getMinutes() + duration;
+
+      let hours = 0;
+      if (endMinutes >= 60) {
+        hours = Math.floor(endMinutes / 60);
+        endMinutes = endMinutes - (hours * 60);
+      }
+
+      const endHours = new Date(firstAvailableBlock.startTime).getHours() + hours;
+
+      const newEndTimeString = `${firstAvailableBlock.startTime.split('T')[0]}T${endHours}:${endMinutes}:${firstAvailableBlock.startTime.split(':')[2]}:00`;
       event.end.dateTime = newEndTimeString;
+      console.log('startTime:', firstAvailableBlock.startTime, { endMinutes, endHours, newEndTimeString })
     }
 
     if (recurringFrequency) {
